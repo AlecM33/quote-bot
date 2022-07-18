@@ -1,0 +1,26 @@
+{
+  "name": "quote-bot",
+  "version": "1.0.0",
+  "description": "A discord bot for saving and displaying memorable quotes from you and your friends",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlecM33/quote-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlecM33/quote-bot/issues"
+  },
+  "homepage": "https://github.com/AlecM33/quote-bot#readme",
+  "dependencies": {
+    "@discordjs/builders": "^1.0.0",
+    "@discordjs/rest": "^1.0.0",
+    "discord-api-types": "^0.36.2",
+    "discord.js": "^13.6.0",
+    "pg": "^8.5.1"
+  }
+}
