@@ -16,6 +16,20 @@ Don't you wish you could quickly immortalize the great things your friends say i
 
 # Tech Stack
 
-The bot is written in javascript and makes heavy use of [discord.js](https://discord.js.org/#/). 
+The bot is written in javascript and makes heavy use of [discord.js](https://discord.js.org/#/), which is a wrapper around the Discord API (view the [developer documentation](https://discord.com/developers/docs/intro)).
 
 I currently host the bot using the [Heroku Cloud Platform](https://heroku.com), and use a free add-on to provision a [PostgreSQL database](https://www.postgresql.org/), where I store the quotes for the single server where the bot operates. 
+
+# Database Schema
+
+The database has one table:
+
+```
+CREATE TABLE quotes (
+    quotation character varying(1000) NOT NULL,
+    author character varying(64) NOT NULL,
+    saidat date NOT NULL
+);
+```
+
+
