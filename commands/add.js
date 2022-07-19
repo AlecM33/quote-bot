@@ -1,6 +1,5 @@
-const { addQuote } = require('../database/client.js');
+const interactionHandlers = require("../modules/interaction-handlers.js");
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { response } = require('../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,19 +13,7 @@ module.exports = {
             option.setName('quote')
                 .setDescription('what was said')
                 .setRequired(true)),
-    async execute(interaction) {
-        const author = interaction.options.getString('author').trim().toLowerCase();
-        const quote = interaction.options.getString('author').trim().toLowerCase();
-        await addQuote(quote, author).catch (async (e) => {
-            if (e.includes("duplicate key")) {
-                await interaction.reply(response.DUPLICATE_QUOTE);
-            } else {
-                await interaction.reply(response.GENERIC_ERROR);
-            }
-        });
-
-        if (!interaction.replied) {
-            await interaction.reply(response.SUCCESS);
-        }
-    },
+    async execute (interaction) {
+        await interactionHandlers.addHandler(interaction);
+    }
 };

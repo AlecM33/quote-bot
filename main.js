@@ -3,7 +3,7 @@ const path = require('node:path');
 const { Client, Collection, Intents } = require('discord.js');
 
 const BOT = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
 });
 
 BOT.commands = new Collection();
@@ -22,7 +22,7 @@ BOT.once('ready', () => {
 });
 
 BOT.login(process.env.TOKEN).then(() => {
-    console.log("bot successfully logged in");
+    console.log('bot successfully logged in');
 });
 
 BOT.on('interactionCreate', async interaction => {
