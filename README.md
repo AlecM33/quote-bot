@@ -11,6 +11,7 @@ Don't you wish you could quickly immortalize the great things your friends say i
 
 - save quotes by any number of specified authors
 - pull random quotes by any author
+- search for quotes that match a keyphrase
 - get statistics including who has said how many quotes
 - more coming soon...
 
