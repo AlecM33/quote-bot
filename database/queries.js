@@ -35,6 +35,13 @@ module.exports = {
             text: 'SELECT COUNT(*) FROM quotes WHERE author = $1;',
             values: [author]
         });
+    },
+
+    fetchQuotesBySearchString: (searchString) => {
+        return query({
+            text: 'SELECT * FROM quotes WHERE quotation LIKE $1',
+            values: ['%' + searchString + '%']
+        });
     }
 
 }

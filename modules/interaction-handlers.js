@@ -44,15 +44,44 @@ module.exports = {
             const queryResult = author ? await queries.getQuotesFromAuthor(author) : await queries.fetchAllQuotes();
             if (queryResult.length > 0) {
                 const randomQuote = queryResult[Math.floor(Math.random() * (queryResult.length - 0))];
-                const capitalizedAuthor = randomQuote.author.charAt(0).toUpperCase() + randomQuote.author.slice(1);
-                const d = new Date(randomQuote.saidat);
-                const year = d.getFullYear().toString().slice(2);
-                await interaction.reply('_"' + randomQuote.quotation + '"_ - ' + capitalizedAuthor + ' (' + (d.getMonth() + 1) + '/' + (d.getDate() + 1) + '/' + year + ')');
+                await interaction.reply(formatQuote(randomQuote));
             } else {
                 await interaction.reply('There are no quotes stored by that author!');
             }
         } catch (e) {
             await interaction.reply('There was a problem getting a random quote. Please try again later');
         }
+    },
+
+    searchHandler: async (interaction) => {
+        const searchString = interaction.options.getString('search_string')?.trim().toLowerCase();
+        const searchResults = await queries.fetchQuotesBySearchString(searchString).catch(async (e) => {
+            await interaction.reply(responseMessages.GENERIC_ERROR);
+        });
+
+        let reply = '';
+        if (searchResults.length === 0) {
+            reply += 'There were no quotes found matching your search.';
+        } else if (searchResults.length > 10) {
+            reply += 'Your search returned too many results! Use a narrower search.';
+        } else {
+            reply += 'Your search for "' + searchString + '" returned **' + searchResults.length + '** quotes: \n\n';
+            for (let result of searchResults) {
+                const quote = formatQuote(result);
+                reply += quote + '\n';
+            }
+        }
+
+        if (!interaction.replied) {
+            await interaction.reply(reply);
+        }
     }
+}
+
+function formatQuote(quote) {
+    const capitalizedAuthor = quote.author.charAt(0).toUpperCase() + quote.author.slice(1);
+    const d = new Date(quote.saidat);
+    const year = d.getFullYear().toString().slice(2);
+    return '_"' + quote.quotation + '"_ - ' + capitalizedAuthor + ' (' + (d.getMonth() + 1) + '/' + (d.getDate() + 1) + '/' + year + ')';
+
 }
