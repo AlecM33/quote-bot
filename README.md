@@ -26,9 +26,10 @@ The database has one table:
 
 ```
 CREATE TABLE quotes (
-    quotation character varying(1000) NOT NULL,
+    quotation citext NOT NULL,
     author character varying(64) NOT NULL,
-    saidat date NOT NULL
+    saidat date NOT NULL,
+    CONSTRAINT quotes_pkey PRIMARY KEY (quotation, author)
 );
 ```
 
