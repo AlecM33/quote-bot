@@ -34,4 +34,6 @@ CREATE TABLE quotes (
 );
 ```
 
+documentation for the "citext" datatype for PostgreSQL 14: https://www.postgresql.org/docs/current/citext.html
+
 
