@@ -43,7 +43,7 @@ For the bot to run, you need to populate 3 environment variables referenced with
 
     `https://discord.com/oauth2/authorize?client_id=your-application-id&permissions=277025392640&scope=bot`
     
-6. Lastly, run the bot on your chosen server with `npm run start`. The bot should log in, and within the server you should see it's slash commands available by simply typing `/`. 
+6. Lastly, run the bot on your chosen server with `npm start`. The bot should log in, and within the server you should see it's slash commands available by simply typing `/`. 
 
 # Database Schema
 
