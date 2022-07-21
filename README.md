@@ -5,16 +5,6 @@ A discord bot for saving and displaying memorable quotes from you and your frien
 
 ![image](https://user-images.githubusercontent.com/24642328/179873365-880df3d1-7259-4ca5-88b0-61f0894a7053.png)
 
-# Features
-
-Don't you wish you could quickly immortalize the great things your friends say in your discord server? This bot allows you to save quotes and later have them quoted back to you.
-
-- save quotes by any number of specified authors
-- pull random quotes by any author
-- search for quotes that match a keyphrase
-- get statistics including who has said how many quotes
-- more coming soon...
-
 # Tech Stack
 
 The bot is written in javascript and makes heavy use of [discord.js](https://discord.js.org/#/), which is a wrapper around the Discord API (view the [developer documentation](https://discord.com/developers/docs/intro)).
