@@ -21,6 +21,26 @@ The bot is written in javascript and makes heavy use of [discord.js](https://dis
 
 I currently host the bot using the [Heroku Cloud Platform](https://heroku.com), and use a free add-on to provision a [PostgreSQL database](https://www.postgresql.org/), where I store the quotes for the single server where the bot operates. 
 
+# Adding the bot to your own server
+
+For the bot to run, you need to populate 3 environment variables referenced within the code. These are `process.env.CLIENT_ID`, `process.env.DATABASE_URL`, and `process.env.TOKEN`. Read below for how to obtain these.
+
+1. You'll need to [create a discord application through the developer portal](https://discord.com/developers/applications). Your application will be assigned an "Application ID" (aka client id), which can be referenced in the "General Information" section. This will be the value of `process.env.CLIENT_ID`. 
+
+2. Within that application, you'll need to add a bot. Within the "Bot" section of the application, you'll see the option to generate a token. This is the authentication token for your bot (and is thus very sensitive data). This will be the value of `process.env.TOKEN`.
+<br>
+<div align=center>
+    <img width=200 src='https://user-images.githubusercontent.com/24642328/180114024-937fa9ba-9cd5-40ea-ac87-8d5e6b2e1043.png'/>
+</div>
+
+3. You will need an instance of a PostgreSQL database, preferably version 14 to ensure compatibility with the "citext" extension - see "Database Schema" below. `process.env.DATABASE_URL` will need to be the value of the connection string for this database. That connection string will be structured like so:
+
+    `postgres://your-username:your-password@your-host:your-port/your-database-name`. 
+    
+4. You'll need to add the bot to your desired server. Within the "Bot" section of your Discord application, you can create a permissions integer that will be added to the OAuth link for a given bot. I recommend, at minimum, the "Send Messages", "Send Messages in Threads", and "Use Slash Commands" permissions, which produce integer `277025392640`. The link to add the bot would then be:
+
+https://discord.com/oauth2/authorize?client_id=**your-application-id**&permissions=**277025392640**&scope=bot
+
 # Database Schema
 
 The database has one table:
