@@ -37,11 +37,13 @@ For the bot to run, you need to populate 3 environment variables referenced with
 
     `postgres://your-username:your-password@your-host:your-port/your-database-name`. 
     
-4. You'll need to add the bot to your desired server. Within the "Bot" section of your Discord application, you can create a permissions integer that will be added to the OAuth link for a given bot. I recommend, at minimum, the "Send Messages", "Send Messages in Threads", and "Use Slash Commands" permissions, which produce integer `277025392640`. The link to add the bot would then be the following, with your application ID substituted in:
+4. You'll need to populate the database with the appropriate schema. See the "Database Schema" section. 
+    
+5. You'll need to add the bot to your desired server. Within the "Bot" section of your Discord application, you can create a permissions integer that will be added to the OAuth link for a given bot. I recommend, at minimum, the "Send Messages", "Send Messages in Threads", and "Use Slash Commands" permissions, which produce integer `277025392640`. The link to add the bot would then be the following, with your application ID substituted in:
 
     `https://discord.com/oauth2/authorize?client_id=your-application-id&permissions=277025392640&scope=bot`
     
-5. Lastly, run the bot on your chosen server with `npm run start`. The bot should log in, and within the server you should see it's slash commands available by simply typing `/`. 
+6. Lastly, run the bot on your chosen server with `npm run start`. The bot should log in, and within the server you should see it's slash commands available by simply typing `/`. 
 
 # Database Schema
 
