@@ -45,9 +45,11 @@ For the bot to run, you need to populate 3 environment variables referenced with
 
 # Database Schema
 
-The database has one table:
+The database has one table. The following should be all that is necessary to run:
 
 ```
+CREATE EXTENSION citext;
+
 CREATE TABLE quotes (
     quotation citext NOT NULL,
     author character varying(64) NOT NULL,
