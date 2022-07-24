@@ -32,6 +32,8 @@ BOT.on('interactionCreate', async interaction => {
 
     if (!command) return;
 
+    console.log(interaction.guildId);
+
     try {
         await command.execute(interaction);
     } catch (error) {

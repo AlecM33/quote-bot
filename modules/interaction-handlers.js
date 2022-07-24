@@ -31,10 +31,10 @@ module.exports = {
                     await interaction.reply('There are **' + queryResult[0].count + '** quotes.');
                 }
             } else {
-                await interaction.reply('There are no quotes!');
+                await interaction.reply(responseMessages.QUOTE_COUNT_0);
             }
         } catch (e) {
-            await interaction.reply('There was a problem getting a random quote. Please try again later');
+            await interaction.reply(responseMessages.GENERIC_ERROR_COUNT_COMMAND);
         }
     },
 
@@ -46,10 +46,10 @@ module.exports = {
                 const randomQuote = queryResult[Math.floor(Math.random() * (queryResult.length - 0))];
                 await interaction.reply(formatQuote(randomQuote));
             } else {
-                await interaction.reply('There are no quotes stored by that author!');
+                await interaction.reply(responseMessages.NO_QUOTES_BY_AUTHOR);
             }
         } catch (e) {
-            await interaction.reply('There was a problem getting a random quote. Please try again later');
+            await interaction.reply(responseMessages.RANDOM_QUOTE_GENERIC_ERROR);
         }
     },
 
@@ -61,12 +61,12 @@ module.exports = {
 
         let reply = '';
         if (searchResults.length === 0) {
-            reply += 'There were no quotes found matching your search.';
+            reply += responseMessages.EMPTY_QUERY;
         } else if (searchResults.length > 10) {
-            reply += 'Your search returned too many results! Use a narrower search.';
+            reply += responseMessages.QUERY_TOO_GENERAL;
         } else {
             reply += 'Your search for "' + searchString + '" returned **' + searchResults.length + '** quotes: \n\n';
-            for (let result of searchResults) {
+            for (const result of searchResults) {
                 const quote = formatQuote(result);
                 reply += quote + '\n';
             }
@@ -76,12 +76,11 @@ module.exports = {
             await interaction.reply(reply);
         }
     }
-}
+};
 
-function formatQuote(quote) {
+function formatQuote (quote) {
     const capitalizedAuthor = quote.author.charAt(0).toUpperCase() + quote.author.slice(1);
-    const d = new Date(quote.saidat);
+    const d = new Date(quote.said_at);
     const year = d.getFullYear().toString().slice(2);
     return '_"' + quote.quotation + '"_ - ' + capitalizedAuthor + ' (' + (d.getMonth() + 1) + '/' + (d.getDate() + 1) + '/' + year + ')';
-
 }
