@@ -1,4 +1,4 @@
-const interactionHandlers = require("../modules/interaction-handlers");
+const interactionHandlers = require('../modules/interaction-handlers');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {

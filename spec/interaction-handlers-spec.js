@@ -91,7 +91,7 @@ describe('interaction handlers', () => {
             spyOn(queries, 'fetchAllQuotes').and.returnValue([
                 {
                     author: 'jane',
-                    saidat: '2022-02-02',
+                    said_at: '2022-02-02',
                     quotation: 'hi'
                 }
             ])
@@ -109,7 +109,7 @@ describe('interaction handlers', () => {
             spyOn(queries, 'getQuotesFromAuthor').and.returnValue([
                 {
                     author: 'jane',
-                    saidat: '2022-02-02',
+                    said_at: '2022-02-02',
                     quotation: 'hi'
                 }
             ])
