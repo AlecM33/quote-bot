@@ -60,7 +60,7 @@ module.exports = {
 
     searchHandler: async (interaction) => {
         const searchString = interaction.options.getString('search_string')?.trim().toLowerCase();
-        const includeIdentifier = interaction.options.getBoolean('include_identifier');
+        //const includeIdentifier = interaction.options.getBoolean('include_identifier');
         const searchResults = await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
             await interaction.reply(responseMessages.GENERIC_ERROR);
         });
@@ -73,7 +73,7 @@ module.exports = {
         } else {
             reply += 'Your search for "' + searchString + '" returned **' + searchResults.length + '** quotes: \n\n';
             for (const result of searchResults) {
-                const quote = formatQuote(result, includeIdentifier);
+                const quote = formatQuote(result, false);  // TODO: use this with delete functionality
                 reply += quote + '\n';
             }
         }
