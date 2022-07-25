@@ -83,7 +83,7 @@ module.exports = {
     },
 
     deleteHandler: async (interaction) => {
-        const result = await queries.deleteQuoteById(interaction.options.getString('identifier')).catch(async (e) => {
+        const result = await queries.deleteQuoteById(interaction.options.getInteger('identifier')).catch(async (e) => {
             await interaction.reply(responseMessages.GENERIC_ERROR);
         });
 
