@@ -15,7 +15,7 @@ module.exports = {
         });
 
         if (!interaction.replied) {
-            await interaction.reply(responseMessages.SUCCESS);
+            await interaction.reply(responseMessages.ADD_SUCCESS);
         }
     },
 
