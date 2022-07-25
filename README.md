@@ -43,11 +43,11 @@ The database has one table. The following should be all that is necessary to run
 CREATE EXTENSION citext;
 
 CREATE TABLE quotes(
+    id SERIAL,
     quotation citext NOT NULL,
     author character varying(64) NOT NULL,
     said_at date NOT NULL,
     guild_id character varying(64) NOT NULL,
-    identifier character varying(32),
     CONSTRAINT quotes_pkey PRIMARY KEY (quotation, author, guild_id)
 );
 ```
