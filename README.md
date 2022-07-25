@@ -42,7 +42,7 @@ The database has one table. The following should be all that is necessary to run
 ```
 CREATE EXTENSION citext;
 
-CREATE TABLE public.quotes(
+CREATE TABLE quotes(
     quotation citext NOT NULL,
     author character varying(64) NOT NULL,
     said_at date NOT NULL,
