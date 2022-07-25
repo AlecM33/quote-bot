@@ -33,6 +33,7 @@
           "--": true,
           "++": true
         }
-      }]
+      }],
+    "no-throw-literal": "off"
   }
 }

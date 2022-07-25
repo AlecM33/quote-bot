@@ -2,49 +2,56 @@ const pool = require('./db');
 
 module.exports = {
 
-    fetchAllQuotes: () => {
+    fetchAllQuotes: (guildId) => {
         return query({
-            text: 'SELECT * FROM quotes;'
+            text: 'SELECT * FROM quotes WHERE guild_id = $1;',
+            values: [guildId]
         });
     },
 
-    addQuote: (quote, author) => {
+    addQuote: (quote, author, guildId) => {
         const now = new Date(Date.now());
 
         return query({
-            text: 'INSERT INTO quotes VALUES ($1, $2, $3);',
-            values: [quote, author.toLowerCase(), (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()]
+            text: 'INSERT INTO quotes VALUES ($1, $2, $3, $4);',
+            values: [
+                quote,
+                author.toLowerCase(),
+                (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear(),
+                guildId
+            ]
         });
     },
 
-    getQuotesFromAuthor: (author) => {
+    getQuotesFromAuthor: (author, guildId) => {
         return query({
-            text: 'SELECT * FROM quotes WHERE author = $1;',
-            values: [author]
+            text: 'SELECT * FROM quotes WHERE author = $1 AND guild_id = $2;',
+            values: [author, guildId]
         });
     },
 
-    fetchQuoteCount: () => {
+    fetchQuoteCount: (guildId) => {
         return query({
-            text: 'SELECT COUNT(*) FROM quotes;'
+            text: 'SELECT COUNT(*) FROM quotes WHERE guild_id = $1;',
+            values: [guildId]
         });
     },
 
-    fetchQuoteCountByAuthor: (author) => {
+    fetchQuoteCountByAuthor: (author, guildId) => {
         return query({
-            text: 'SELECT COUNT(*) FROM quotes WHERE author = $1;',
-            values: [author]
+            text: 'SELECT COUNT(*) FROM quotes WHERE author = $1 AND guild_id = $2;',
+            values: [author, guildId]
         });
     },
 
-    fetchQuotesBySearchString: (searchString) => {
+    fetchQuotesBySearchString: (searchString, guildId) => {
         return query({
-            text: 'SELECT * FROM quotes WHERE quotation LIKE $1',
-            values: ['%' + searchString + '%']
+            text: 'SELECT * FROM quotes WHERE quotation LIKE $1 AND guild_id = $2;',
+            values: ['%' + searchString + '%', guildId]
         });
     }
 
-}
+};
 
 function query (queryParams) {
     return new Promise((resolve, reject) => {
