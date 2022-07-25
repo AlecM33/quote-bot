@@ -88,9 +88,12 @@ module.exports = {
         });
 
         console.log(result);
-
         if (!interaction.replied) {
-            await interaction.reply(responseMessages.DELETE_SUCCESS);
+            if (result.length === 0) {
+                await interaction.reply(responseMessages.NOTHING_DELETED);
+            } else {
+                await interaction.reply(responseMessages.DELETE_SUCCESS);
+            }
         }
     }
 };

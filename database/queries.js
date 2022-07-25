@@ -51,10 +51,10 @@ module.exports = {
         });
     },
 
-    deleteQuoteById: (id) => {
+    deleteQuoteById: (id, guildId) => {
         return query({
-            text: 'DELETE FROM quotes WHERE id = $1',
-            values: [id]
+            text: 'DELETE FROM quotes WHERE id = $1 AND guild_id = $2 RETURNING *;',
+            values: [id, guildId]
         });
     }
 
