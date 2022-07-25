@@ -49,6 +49,13 @@ module.exports = {
             text: 'SELECT * FROM quotes WHERE quotation LIKE $1 AND guild_id = $2;',
             values: ['%' + searchString + '%', guildId]
         });
+    },
+
+    deleteQuoteById: (id) => {
+        return query({
+            text: 'DELETE FROM quotes WHERE id = $1',
+            values: [id]
+        });
     }
 
 };

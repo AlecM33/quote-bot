@@ -80,6 +80,16 @@ module.exports = {
         if (!interaction.replied) {
             await interaction.reply(reply);
         }
+    },
+
+    deleteHandler: async (interaction) => {
+        await queries.deleteQuoteById(interaction.options.getString('identifier')).catch(async (e) => {
+            await interaction.reply(responseMessages.GENERIC_ERROR);
+        });
+
+        if (!interaction.replied) {
+            await interaction.reply(responseMessages.DELETE_SUCCESS);
+        }
     }
 };
 
