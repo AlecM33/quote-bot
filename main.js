@@ -1,9 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Intents } = require('discord.js');
-const identifier = require('./modules/identifier');
-
-console.log(identifier());
 
 const BOT = new Client({
     intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
