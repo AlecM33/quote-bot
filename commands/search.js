@@ -8,7 +8,12 @@ module.exports = {
         .addStringOption(option =>
             option.setName('search_string')
                 .setDescription('a keyword or keyphrase by which to search for quotes')
-                .setRequired(true)),
+                .setRequired(true))
+        .addBooleanOption(option =>
+            option.setName('include_identifier')
+                .setDescription('specify whether to include the short, unique identifier for each quote in the search result.' +
+                    ' This identifier can be used to delete a particular quote.')
+                .setRequired(false)),
     async execute (interaction) {
         await interactionHandlers.searchHandler(interaction);
     }

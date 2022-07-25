@@ -1,12 +1,13 @@
 const responseMessages = require('../response-messages.js');
 const queries = require('../database/queries.js');
+const identifier = require('./identifier.js');
 
 module.exports = {
 
     addHandler: async (interaction) => {
         const author = interaction.options.getString('author').trim().toLowerCase();
         const quote = interaction.options.getString('quote').trim().toLowerCase();
-        await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
+        await queries.addQuote(quote, author, interaction.guildId, identifier.create()).catch(async (e) => {
             if (e.includes('duplicate key')) {
                 await interaction.reply(responseMessages.DUPLICATE_QUOTE);
             } else {
@@ -47,7 +48,7 @@ module.exports = {
                 await queries.getQuotesFromAuthor(author, interaction.guildId)
                 : await queries.fetchAllQuotes(interaction.guildId);
             if (queryResult.length > 0) {
-                const randomQuote = queryResult[Math.floor(Math.random() * (queryResult.length - 0))];
+                const randomQuote = queryResult[Math.floor(Math.random() * queryResult.length)];
                 await interaction.reply(formatQuote(randomQuote));
             } else {
                 await interaction.reply(responseMessages.NO_QUOTES_BY_AUTHOR);
@@ -59,6 +60,7 @@ module.exports = {
 
     searchHandler: async (interaction) => {
         const searchString = interaction.options.getString('search_string')?.trim().toLowerCase();
+        const includeIdentifier = interaction.options.getBoolean('include_identifier');
         const searchResults = await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
             await interaction.reply(responseMessages.GENERIC_ERROR);
         });
@@ -71,7 +73,7 @@ module.exports = {
         } else {
             reply += 'Your search for "' + searchString + '" returned **' + searchResults.length + '** quotes: \n\n';
             for (const result of searchResults) {
-                const quote = formatQuote(result);
+                const quote = formatQuote(result, includeIdentifier);
                 reply += quote + '\n';
             }
         }
@@ -82,9 +84,17 @@ module.exports = {
     }
 };
 
-function formatQuote (quote) {
+function formatQuote (quote, includeIdentifier = false) {
+    let quoteMessage = '';
     const capitalizedAuthor = quote.author.charAt(0).toUpperCase() + quote.author.slice(1);
     const d = new Date(quote.said_at);
     const year = d.getFullYear().toString().slice(2);
-    return '_"' + quote.quotation + '"_ - ' + capitalizedAuthor + ' (' + (d.getMonth() + 1) + '/' + (d.getDate() + 1) + '/' + year + ')';
+
+    quoteMessage += '_"' + quote.quotation + '"_ - ' + capitalizedAuthor + ' (' + (d.getMonth() + 1) + '/' + (d.getDate() + 1) + '/' + year + ')';
+
+    if (includeIdentifier) {
+        quoteMessage += ' (**identifier**: _' + quote.identifier + '_)';
+    }
+
+    return quoteMessage;
 }
