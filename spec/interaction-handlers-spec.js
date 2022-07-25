@@ -43,7 +43,7 @@ describe('interaction handlers', () => {
         });
 
         it('should throw a duplicate key exception', async () => {
-            spyOn(queries, 'addQuote').and.callFake(async (quote, author) => {
+            spyOn(queries, 'addQuote').and.callFake(async (quote, author, guildId) => {
                 throw 'duplicate key error';
             });
             try {
@@ -55,7 +55,7 @@ describe('interaction handlers', () => {
         });
 
         it('should throw a generic exception', async () => {
-            spyOn(queries, 'addQuote').and.callFake(async (quote, author) => {
+            spyOn(queries, 'addQuote').and.callFake(async (quote, author, guildId) => {
                 throw 'could not connect to database';
             });
             try {
@@ -81,7 +81,8 @@ describe('interaction handlers', () => {
                     }
                 },
                 reply: async (message) => { this.replied = true },
-                replied: false
+                replied: false,
+                guildId: '123'
             }
 
             spyOn(interaction, 'reply');
@@ -99,7 +100,7 @@ describe('interaction handlers', () => {
 
             await interactionHandlers.randomHandler(interaction);
 
-            expect(queries.fetchAllQuotes).toHaveBeenCalled();
+            expect(queries.fetchAllQuotes).toHaveBeenCalledWith('123');
             expect(interaction.reply).toHaveBeenCalled();
         });
 
@@ -117,7 +118,7 @@ describe('interaction handlers', () => {
 
             await interactionHandlers.randomHandler(interaction);
 
-            expect(queries.getQuotesFromAuthor).toHaveBeenCalled();
+            expect(queries.getQuotesFromAuthor).toHaveBeenCalledWith('jane', '123');
             expect(interaction.reply).toHaveBeenCalled();
         });
     });

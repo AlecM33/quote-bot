@@ -2,16 +2,14 @@ const pool = require('./db');
 
 module.exports = {
 
-    fetchAllQuotes: () => {
+    fetchAllQuotes: (guildId) => {
         return query({
-            text: 'SELECT * FROM quotes;'
+            text: 'SELECT * FROM quotes where guild_id = $1;',
+            values: [guildId]
         });
     },
 
     addQuote: (quote, author, guildId) => {
-        if (typeof guildId !== 'string') {
-            guildId = guildId.toString()
-        }
         const now = new Date(Date.now());
 
         return query({
@@ -25,30 +23,31 @@ module.exports = {
         });
     },
 
-    getQuotesFromAuthor: (author) => {
+    getQuotesFromAuthor: (author, guildId) => {
         return query({
-            text: 'SELECT * FROM quotes WHERE author = $1;',
-            values: [author]
+            text: 'SELECT * FROM quotes WHERE author = $1 AND guild_id = $2;',
+            values: [author, guildId]
         });
     },
 
-    fetchQuoteCount: () => {
+    fetchQuoteCount: (guildId) => {
         return query({
-            text: 'SELECT COUNT(*) FROM quotes;'
+            text: 'SELECT COUNT(*) FROM quotes WHERE guild_id = $1;',
+            values: [guildId]
         });
     },
 
-    fetchQuoteCountByAuthor: (author) => {
+    fetchQuoteCountByAuthor: (author, guildId) => {
         return query({
-            text: 'SELECT COUNT(*) FROM quotes WHERE author = $1;',
-            values: [author]
+            text: 'SELECT COUNT(*) FROM quotes WHERE author = $1 AND guild_id = $2;',
+            values: [author, guildId]
         });
     },
 
-    fetchQuotesBySearchString: (searchString) => {
+    fetchQuotesBySearchString: (searchString, guildId) => {
         return query({
-            text: 'SELECT * FROM quotes WHERE quotation LIKE $1',
-            values: ['%' + searchString + '%']
+            text: 'SELECT * FROM quotes WHERE quotation LIKE $1 AND guild_id = $2;',
+            values: ['%' + searchString + '%', guildId]
         });
     }
 

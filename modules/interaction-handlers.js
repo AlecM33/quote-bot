@@ -22,7 +22,9 @@ module.exports = {
     countHandler: async (interaction) => {
         const author = interaction.options.getString('author')?.trim().toLowerCase();
         try {
-            const queryResult = author ? await queries.fetchQuoteCountByAuthor(author) : await queries.fetchQuoteCount();
+            const queryResult = author
+                ? await queries.fetchQuoteCountByAuthor(author, interaction.guildId)
+                : await queries.fetchQuoteCount(interaction.guildId);
             if (queryResult.length > 0) {
                 if (author) {
                     const capitalizedAuthor = author.charAt(0).toUpperCase() + author.slice(1);
@@ -41,7 +43,9 @@ module.exports = {
     randomHandler: async (interaction) => {
         const author = interaction.options.getString('author')?.trim().toLowerCase();
         try {
-            const queryResult = author ? await queries.getQuotesFromAuthor(author) : await queries.fetchAllQuotes();
+            const queryResult = author ?
+                await queries.getQuotesFromAuthor(author, interaction.guildId)
+                : await queries.fetchAllQuotes(interaction.guildId);
             if (queryResult.length > 0) {
                 const randomQuote = queryResult[Math.floor(Math.random() * (queryResult.length - 0))];
                 await interaction.reply(formatQuote(randomQuote));
@@ -55,7 +59,7 @@ module.exports = {
 
     searchHandler: async (interaction) => {
         const searchString = interaction.options.getString('search_string')?.trim().toLowerCase();
-        const searchResults = await queries.fetchQuotesBySearchString(searchString).catch(async (e) => {
+        const searchResults = await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
             await interaction.reply(responseMessages.GENERIC_ERROR);
         });
 
