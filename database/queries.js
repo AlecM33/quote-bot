@@ -8,12 +8,20 @@ module.exports = {
         });
     },
 
-    addQuote: (quote, author) => {
+    addQuote: (quote, author, guildId) => {
+        if (typeof guildId !== 'string') {
+            guildId = guildId.toString()
+        }
         const now = new Date(Date.now());
 
         return query({
-            text: 'INSERT INTO quotes VALUES ($1, $2, $3);',
-            values: [quote, author.toLowerCase(), (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()]
+            text: 'INSERT INTO quotes VALUES ($1, $2, $3, $4);',
+            values: [
+                quote,
+                author.toLowerCase(),
+                (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear(),
+                guildId
+            ]
         });
     },
 

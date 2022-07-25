@@ -21,6 +21,7 @@ describe('interaction handlers', () => {
                         return null;
                     }
                 },
+                guildId: '123',
                 reply: async (message) => { this.replied = true },
                 replied: false
             }
@@ -29,7 +30,7 @@ describe('interaction handlers', () => {
         })
 
         it('should call the query function for add quote', async () => {
-            spyOn(queries, 'addQuote').and.callFake((quote, author) => {
+            spyOn(queries, 'addQuote').and.callFake((quote, author, guildId) => {
                 return {
                     catch: (e) => { }
                 }
@@ -37,7 +38,7 @@ describe('interaction handlers', () => {
 
             await interactionHandlers.addHandler(interaction);
 
-            expect(queries.addQuote).toHaveBeenCalledWith('quote', 'author');
+            expect(queries.addQuote).toHaveBeenCalledWith('quote', 'author', '123');
             expect(interaction.reply).toHaveBeenCalledWith(responseMessages.SUCCESS);
         });
 

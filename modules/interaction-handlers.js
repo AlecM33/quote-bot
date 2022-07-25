@@ -6,7 +6,7 @@ module.exports = {
     addHandler: async (interaction) => {
         const author = interaction.options.getString('author').trim().toLowerCase();
         const quote = interaction.options.getString('quote').trim().toLowerCase();
-        await queries.addQuote(quote, author).catch(async (e) => {
+        await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
             if (e.includes('duplicate key')) {
                 await interaction.reply(responseMessages.DUPLICATE_QUOTE);
             } else {
