@@ -4,7 +4,7 @@ module.exports = {
 
     fetchAllQuotes: (guildId) => {
         return query({
-            text: 'SELECT * FROM quotes where guild_id = $1;',
+            text: 'SELECT * FROM quotes WHERE guild_id = $1;',
             values: [guildId]
         });
     },
@@ -51,7 +51,7 @@ module.exports = {
         });
     }
 
-}
+};
 
 function query (queryParams) {
     return new Promise((resolve, reject) => {

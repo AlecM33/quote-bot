@@ -3,9 +3,7 @@ const queries = require('../database/queries.js');
 const responseMessages = require('../response-messages.js');
 
 describe('interaction handlers', () => {
-
     describe('#addHandler', () => {
-
         let interaction;
 
         beforeAll(() => {
@@ -22,18 +20,18 @@ describe('interaction handlers', () => {
                     }
                 },
                 guildId: '123',
-                reply: async (message) => { this.replied = true },
+                reply: async (message) => { this.replied = true; },
                 replied: false
-            }
+            };
 
             spyOn(interaction, 'reply');
-        })
+        });
 
         it('should call the query function for add quote', async () => {
             spyOn(queries, 'addQuote').and.callFake((quote, author, guildId) => {
                 return {
                     catch: (e) => { }
-                }
+                };
             });
 
             await interactionHandlers.addHandler(interaction);
@@ -48,7 +46,7 @@ describe('interaction handlers', () => {
             });
             try {
                 await interactionHandlers.addHandler(interaction);
-            } catch(e) {
+            } catch (e) {
                 expect(queries.addQuote).toThrow();
                 expect(interaction.reply).toHaveBeenCalledWith(responseMessages.DUPLICATE_QUOTE);
             }
@@ -60,7 +58,7 @@ describe('interaction handlers', () => {
             });
             try {
                 await interactionHandlers.addHandler(interaction);
-            } catch(e) {
+            } catch (e) {
                 expect(queries.addQuote).toThrow();
                 expect(interaction.reply).toHaveBeenCalledWith(responseMessages.GENERIC_ERROR);
             }
@@ -68,7 +66,6 @@ describe('interaction handlers', () => {
     });
 
     describe('#randomHandler', () => {
-
         let interaction;
 
         beforeAll(() => {
@@ -80,23 +77,22 @@ describe('interaction handlers', () => {
                         }
                     }
                 },
-                reply: async (message) => { this.replied = true },
+                reply: async (message) => { this.replied = true; },
                 replied: false,
                 guildId: '123'
-            }
+            };
 
             spyOn(interaction, 'reply');
         });
 
         it('should get a random quote from any author if the author is not provided', async () => {
-
             spyOn(queries, 'fetchAllQuotes').and.returnValue([
                 {
                     author: 'jane',
                     said_at: '2022-02-02',
                     quotation: 'hi'
                 }
-            ])
+            ]);
 
             await interactionHandlers.randomHandler(interaction);
 
@@ -105,7 +101,6 @@ describe('interaction handlers', () => {
         });
 
         it('should get a random quote from a specific author if the author is provided', async () => {
-
             spyOn(interaction.options, 'getString').and.returnValue('Jane');
 
             spyOn(queries, 'getQuotesFromAuthor').and.returnValue([
@@ -114,7 +109,7 @@ describe('interaction handlers', () => {
                     said_at: '2022-02-02',
                     quotation: 'hi'
                 }
-            ])
+            ]);
 
             await interactionHandlers.randomHandler(interaction);
 
@@ -122,5 +117,4 @@ describe('interaction handlers', () => {
             expect(interaction.reply).toHaveBeenCalled();
         });
     });
-
 });
