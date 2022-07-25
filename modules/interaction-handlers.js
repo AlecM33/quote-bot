@@ -1,13 +1,13 @@
 const responseMessages = require('../response-messages.js');
 const queries = require('../database/queries.js');
-const identifier = require('./modules/identifier.js');
+const identifier = require('./identifier.js');
 
 module.exports = {
 
     addHandler: async (interaction) => {
         const author = interaction.options.getString('author').trim().toLowerCase();
         const quote = interaction.options.getString('quote').trim().toLowerCase();
-        await queries.addQuote(quote, author, interaction.guildId, identifier()).catch(async (e) => {
+        await queries.addQuote(quote, author, interaction.guildId, identifier.create()).catch(async (e) => {
             if (e.includes('duplicate key')) {
                 await interaction.reply(responseMessages.DUPLICATE_QUOTE);
             } else {

@@ -1,6 +1,7 @@
 const interactionHandlers = require('../modules/interaction-handlers.js');
 const queries = require('../database/queries.js');
 const responseMessages = require('../response-messages.js');
+const identifier = require('../modules/identifier.js');
 
 describe('interaction handlers', () => {
     describe('#addHandler', () => {
@@ -20,15 +21,17 @@ describe('interaction handlers', () => {
                     }
                 },
                 guildId: '123',
+                identifier: 'red001',
                 reply: async (message) => { this.replied = true; },
                 replied: false
             };
 
             spyOn(interaction, 'reply');
+            spyOn(identifier, 'create').and.returnValue('red001');
         });
 
         it('should call the query function for add quote', async () => {
-            spyOn(queries, 'addQuote').and.callFake((quote, author, guildId) => {
+            spyOn(queries, 'addQuote').and.callFake((quote, author, guildId, identifier) => {
                 return {
                     catch: (e) => { }
                 };
@@ -36,12 +39,12 @@ describe('interaction handlers', () => {
 
             await interactionHandlers.addHandler(interaction);
 
-            expect(queries.addQuote).toHaveBeenCalledWith('quote', 'author', '123');
+            expect(queries.addQuote).toHaveBeenCalledWith('quote', 'author', '123', 'red001');
             expect(interaction.reply).toHaveBeenCalledWith(responseMessages.SUCCESS);
         });
 
         it('should throw a duplicate key exception', async () => {
-            spyOn(queries, 'addQuote').and.callFake(async (quote, author, guildId) => {
+            spyOn(queries, 'addQuote').and.callFake(async (quote, author, guildId, identifier) => {
                 throw 'duplicate key error';
             });
             try {
@@ -53,7 +56,7 @@ describe('interaction handlers', () => {
         });
 
         it('should throw a generic exception', async () => {
-            spyOn(queries, 'addQuote').and.callFake(async (quote, author, guildId) => {
+            spyOn(queries, 'addQuote').and.callFake(async (quote, author, guildId, identifier) => {
                 throw 'could not connect to database';
             });
             try {
