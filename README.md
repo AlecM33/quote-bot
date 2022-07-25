@@ -13,6 +13,8 @@ I currently host the bot using the [Heroku Cloud Platform](https://heroku.com), 
 
 # Adding the bot to your own server(s)
 
+Stored quotes are associated with a specific guild, so you can safely add the same instance of the bot to multiple servers. 
+
 For the bot to run, you need to populate 3 environment variables referenced within the code. These are `process.env.CLIENT_ID`, `process.env.DATABASE_URL`, and `process.env.TOKEN`. Read below for how to obtain these.
 
 1. You'll need to [create a discord application through the developer portal](https://discord.com/developers/applications). Your application will be assigned an "Application ID" (aka client id), which can be referenced in the "General Information" section. This will be the value of `process.env.CLIENT_ID`. 
