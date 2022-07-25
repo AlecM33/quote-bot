@@ -9,16 +9,17 @@ module.exports = {
         });
     },
 
-    addQuote: (quote, author, guildId) => {
+    addQuote: (quote, author, guildId, identifier) => {
         const now = new Date(Date.now());
 
         return query({
-            text: 'INSERT INTO quotes VALUES ($1, $2, $3, $4);',
+            text: 'INSERT INTO quotes VALUES ($1, $2, $3, $4, $5);',
             values: [
                 quote,
                 author.toLowerCase(),
                 (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear(),
-                guildId
+                guildId,
+                identifier
             ]
         });
     },
