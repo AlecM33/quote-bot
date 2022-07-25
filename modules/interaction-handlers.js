@@ -87,12 +87,11 @@ module.exports = {
             await interaction.reply(responseMessages.GENERIC_ERROR);
         });
 
-        console.log(result);
         if (!interaction.replied) {
             if (result.length === 0) {
                 await interaction.reply(responseMessages.NOTHING_DELETED);
             } else {
-                await interaction.reply(responseMessages.DELETE_SUCCESS);
+                await interaction.reply('The following quote was deleted: \n' + formatQuote(result[0]));
             }
         }
     }
