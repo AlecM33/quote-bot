@@ -11,8 +11,7 @@ module.exports = {
                 .setRequired(true))
         .addBooleanOption(option =>
             option.setName('include_identifier')
-                .setDescription('specify whether to include the short, unique identifier for each quote in the search result.' +
-                    ' This identifier can be used to delete a particular quote.')
+                .setDescription('include the unique identifier for each resulting quote, which can be used to delete that quote.')
                 .setRequired(false)),
     async execute (interaction) {
         await interactionHandlers.searchHandler(interaction);
