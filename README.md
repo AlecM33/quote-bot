@@ -11,7 +11,7 @@ The bot is written in javascript and makes heavy use of [discord.js](https://dis
 
 I currently host the bot using the [Heroku Cloud Platform](https://heroku.com), and use a free add-on to provision a [PostgreSQL database](https://www.postgresql.org/), where I store the quotes for the single server where the bot operates. 
 
-# Adding the bot to your own server
+# Adding the bot to your own server(s)
 
 For the bot to run, you need to populate 3 environment variables referenced within the code. These are `process.env.CLIENT_ID`, `process.env.DATABASE_URL`, and `process.env.TOKEN`. Read below for how to obtain these.
 
