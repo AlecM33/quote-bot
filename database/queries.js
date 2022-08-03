@@ -17,7 +17,7 @@ module.exports = {
             values: [
                 quote,
                 author,
-                (now.getMonth() + 1) + '/' + now.getDay() + '/' + now.getFullYear(),
+                (now.getMonth() + 1) + '/' + now.getDay() - 1 + '/' + now.getFullYear(),
                 guildId
             ]
         });
