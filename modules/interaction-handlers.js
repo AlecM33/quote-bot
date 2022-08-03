@@ -6,7 +6,7 @@ module.exports = {
     addHandler: async (interaction) => {
         const author = interaction.options.getString('author').trim().toLowerCase();
         const quote = interaction.options.getString('quote').trim().toLowerCase();
-        await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
+        const result = await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
             if (e.includes('duplicate key')) {
                 await interaction.reply(responseMessages.DUPLICATE_QUOTE);
             } else {
@@ -15,7 +15,7 @@ module.exports = {
         });
 
         if (!interaction.replied) {
-            await interaction.reply(responseMessages.ADD_SUCCESS);
+            await interaction.reply('Added the following:\n\n' + formatQuote(result[0], false));
         }
     },
 
@@ -27,8 +27,7 @@ module.exports = {
                 : await queries.fetchQuoteCount(interaction.guildId);
             if (queryResult.length > 0) {
                 if (author) {
-                    const capitalizedAuthor = author.charAt(0).toUpperCase() + author.slice(1);
-                    await interaction.reply('**' + capitalizedAuthor + '** has said **' + queryResult[0].count + '** quotes.');
+                    await interaction.reply('**' + author + '** has said **' + queryResult[0].count + '** quotes.');
                 } else {
                     await interaction.reply('There are **' + queryResult[0].count + '** quotes.');
                 }
@@ -72,7 +71,7 @@ module.exports = {
         } else {
             reply += 'Your search for "' + searchString + '" returned **' + searchResults.length + '** quotes: \n\n';
             for (const result of searchResults) {
-                const quote = formatQuote(result, includeIdentifier);  // TODO: use this with delete functionality
+                const quote = formatQuote(result, includeIdentifier);
                 reply += quote + '\n';
             }
         }
@@ -99,11 +98,10 @@ module.exports = {
 
 function formatQuote (quote, includeIdentifier = false) {
     let quoteMessage = '';
-    const capitalizedAuthor = quote.author.charAt(0).toUpperCase() + quote.author.slice(1);
     const d = new Date(quote.said_at);
     const year = d.getFullYear().toString().slice(2);
 
-    quoteMessage += '_"' + quote.quotation + '"_ - ' + capitalizedAuthor + ' (' + (d.getMonth() + 1) + '/' + (d.getDate() + 1) + '/' + year + ')';
+    quoteMessage += '_"' + quote.quotation + '"_ - ' + quote.author + ' (' + (d.getMonth() + 1) + '/' + (d.getDate() + 1) + '/' + year + ')';
 
     if (includeIdentifier) {
         quoteMessage += ' (**identifier**: _' + quote.id + '_)';

@@ -27,21 +27,28 @@ describe('interaction handlers', () => {
             spyOn(interaction, 'reply');
         });
 
-        it('should call the query function for add quote', async () => {
-            spyOn(queries, 'addQuote').and.callFake((quote, author, guildId) => {
+        it('should echo back a successfully added quote', async () => {
+            spyOn(queries, 'addQuote').and.callFake(async (quote, author, guildId) => {
+                interaction.replied = false;
                 return {
-                    catch: (e) => { }
-                };
+                    0: {
+                        quotation: 'test',
+                        author: 'jane doe',
+                        said_at: '2022-02-02'
+                    },
+                    catch: (e) => {}
+                }
             });
 
             await interactionHandlers.addHandler(interaction);
 
-            expect(queries.addQuote).toHaveBeenCalledWith('quote', 'author', '123', 'red001');
-            expect(interaction.reply).toHaveBeenCalledWith(responseMessages.SUCCESS);
+            expect(queries.addQuote).toHaveBeenCalledWith('quote', 'author', '123');
+            expect(interaction.reply).toHaveBeenCalledWith('Added the following:\n\n_"test"_ - jane doe (2/2/22)');
         });
 
         it('should throw a duplicate key exception', async () => {
             spyOn(queries, 'addQuote').and.callFake(async (quote, author, guildId) => {
+                interaction.replied = true;
                 throw 'duplicate key error';
             });
             try {
@@ -54,6 +61,7 @@ describe('interaction handlers', () => {
 
         it('should throw a generic exception', async () => {
             spyOn(queries, 'addQuote').and.callFake(async (quote, author, guildId) => {
+                interaction.replied = true;
                 throw 'could not connect to database';
             });
             try {
@@ -101,7 +109,7 @@ describe('interaction handlers', () => {
         });
 
         it('should get a random quote from a specific author if the author is provided', async () => {
-            spyOn(interaction.options, 'getString').and.returnValue('Jane');
+            spyOn(interaction.options, 'getString').and.returnValue('jane');
 
             spyOn(queries, 'getQuotesFromAuthor').and.returnValue([
                 {
