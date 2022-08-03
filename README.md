@@ -44,10 +44,16 @@ The database has one table. The following should be all that is necessary to run
 ```
 CREATE EXTENSION citext;
 
+CREATE COLLATION ci ( // case-insensitive collation for the author column.
+  provider = 'icu',
+  locale = 'utf-8@colStrength=secondary',
+  deterministic = false
+);
+
 CREATE TABLE quotes(
     id SERIAL,
     quotation citext NOT NULL,
-    author character varying(64) NOT NULL,
+    author character varying(64) COLLATE ci NOT NULL,
     said_at date NOT NULL,
     guild_id character varying(64) NOT NULL,
     CONSTRAINT quotes_pkey PRIMARY KEY (quotation, author, guild_id)

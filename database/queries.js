@@ -13,10 +13,10 @@ module.exports = {
         const now = new Date(Date.now());
 
         return query({
-            text: 'INSERT INTO quotes VALUES (DEFAULT, $1, $2, $3, $4);',
+            text: 'INSERT INTO quotes VALUES (DEFAULT, $1, $2, $3, $4) RETURNING quotation, author, said_at;',
             values: [
                 quote,
-                author.toLowerCase(),
+                author,
                 (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear(),
                 guildId
             ]
