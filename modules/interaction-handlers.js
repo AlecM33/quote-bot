@@ -101,7 +101,7 @@ function formatQuote (quote, includeIdentifier = false) {
     const d = new Date(quote.said_at);
     const year = d.getFullYear().toString().slice(2);
 
-    quoteMessage += '_"' + quote.quotation + '"_ - ' + quote.author + ' (' + (d.getMonth() + 1) + '/' + (d.getDay() - 1) + '/' + year + ')';
+    quoteMessage += '_"' + quote.quotation + '"_ - ' + quote.author + ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')';
 
     if (includeIdentifier) {
         quoteMessage += ' (**identifier**: _' + quote.id + '_)';
