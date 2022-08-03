@@ -4,8 +4,8 @@ const queries = require('../database/queries.js');
 module.exports = {
 
     addHandler: async (interaction) => {
-        const author = interaction.options.getString('author').trim().toLowerCase();
-        const quote = interaction.options.getString('quote').trim().toLowerCase();
+        const author = interaction.options.getString('author').trim();
+        const quote = interaction.options.getString('quote').trim();
         const result = await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
             if (e.includes('duplicate key')) {
                 await interaction.reply(responseMessages.DUPLICATE_QUOTE);
@@ -20,7 +20,7 @@ module.exports = {
     },
 
     countHandler: async (interaction) => {
-        const author = interaction.options.getString('author')?.trim().toLowerCase();
+        const author = interaction.options.getString('author')?.trim();
         try {
             const queryResult = author
                 ? await queries.fetchQuoteCountByAuthor(author, interaction.guildId)
@@ -40,10 +40,10 @@ module.exports = {
     },
 
     randomHandler: async (interaction) => {
-        const author = interaction.options.getString('author')?.trim().toLowerCase();
+        const author = interaction.options.getString('author')?.trim();
         try {
-            const queryResult = author ?
-                await queries.getQuotesFromAuthor(author, interaction.guildId)
+            const queryResult = author
+                ? await queries.getQuotesFromAuthor(author, interaction.guildId)
                 : await queries.fetchAllQuotes(interaction.guildId);
             if (queryResult.length > 0) {
                 const randomQuote = queryResult[Math.floor(Math.random() * queryResult.length)];
@@ -57,7 +57,7 @@ module.exports = {
     },
 
     searchHandler: async (interaction) => {
-        const searchString = interaction.options.getString('search_string')?.trim().toLowerCase();
+        const searchString = interaction.options.getString('search_string')?.trim();
         const includeIdentifier = interaction.options.getBoolean('include_identifier');
         const searchResults = await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
             await interaction.reply(responseMessages.GENERIC_ERROR);

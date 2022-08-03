@@ -37,7 +37,7 @@ describe('interaction handlers', () => {
                         said_at: '2022-02-02'
                     },
                     catch: (e) => {}
-                }
+                };
             });
 
             await interactionHandlers.addHandler(interaction);

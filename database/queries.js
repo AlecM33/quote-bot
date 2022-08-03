@@ -16,7 +16,7 @@ module.exports = {
             text: 'INSERT INTO quotes VALUES (DEFAULT, $1, $2, $3, $4) RETURNING quotation, author, said_at;',
             values: [
                 quote,
-                author.toLowerCase(),
+                author,
                 (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear(),
                 guildId
             ]
