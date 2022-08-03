@@ -15,7 +15,7 @@ module.exports = {
         });
 
         if (!interaction.replied) {
-            await interaction.reply('Added the following:\n\n' + formatQuote(result[0], false));
+            await interaction.reply('Added the following:\n\n' + formatQuote(result[0], false, false));
         }
     },
 
@@ -47,7 +47,7 @@ module.exports = {
                 : await queries.fetchAllQuotes(interaction.guildId);
             if (queryResult.length > 0) {
                 const randomQuote = queryResult[Math.floor(Math.random() * queryResult.length)];
-                await interaction.reply(formatQuote(randomQuote));
+                await interaction.reply(formatQuote(randomQuote, true, false));
             } else {
                 await interaction.reply(responseMessages.NO_QUOTES_BY_AUTHOR);
             }
@@ -71,7 +71,7 @@ module.exports = {
         } else {
             reply += 'Your search for "' + searchString + '" returned **' + searchResults.length + '** quotes: \n\n';
             for (const result of searchResults) {
-                const quote = formatQuote(result, includeIdentifier);
+                const quote = formatQuote(result, true, includeIdentifier);
                 reply += quote + '\n';
             }
         }
@@ -90,18 +90,22 @@ module.exports = {
             if (result.length === 0) {
                 await interaction.reply(responseMessages.NOTHING_DELETED);
             } else {
-                await interaction.reply('The following quote was deleted: \n\n' + formatQuote(result[0]));
+                await interaction.reply('The following quote was deleted: \n\n' + formatQuote(result[0], true, false));
             }
         }
     }
 };
 
-function formatQuote (quote, includeIdentifier = false) {
+function formatQuote (quote, includeDate = true, includeIdentifier = false) {
     let quoteMessage = '';
     const d = new Date(quote.said_at);
     const year = d.getFullYear().toString().slice(2);
 
-    quoteMessage += '_"' + quote.quotation + '"_ - ' + quote.author + ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')';
+    quoteMessage += '_"' + quote.quotation + '"_ - ' + quote.author
+
+    if (includeDate) {
+        quoteMessage += ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')';
+    }
 
     if (includeIdentifier) {
         quoteMessage += ' (**identifier**: _' + quote.id + '_)';

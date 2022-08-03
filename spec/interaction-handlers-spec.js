@@ -43,7 +43,7 @@ describe('interaction handlers', () => {
             await interactionHandlers.addHandler(interaction);
 
             expect(queries.addQuote).toHaveBeenCalledWith('quote', 'author', '123');
-            expect(interaction.reply).toHaveBeenCalledWith('Added the following:\n\n_"test"_ - jane doe (2/2/22)');
+            expect(interaction.reply).toHaveBeenCalledWith('Added the following:\n\n_"test"_ - jane doe');
         });
 
         it('should throw a duplicate key exception', async () => {
