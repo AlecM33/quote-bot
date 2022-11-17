@@ -9,7 +9,7 @@ A discord bot for saving and displaying memorable quotes from your friends.
 
 The bot is written in javascript and makes heavy use of [discord.js](https://discord.js.org/#/), which is a wrapper around the Discord API (view the [developer documentation](https://discord.com/developers/docs/intro)).
 
-I currently host the bot using the [Heroku Cloud Platform](https://heroku.com), and use a free add-on to provision a [PostgreSQL database](https://www.postgresql.org/), where I store the quotes for the single server where the bot operates. 
+I currently host the bot using the [Heroku Cloud Platform](https://heroku.com), and use a free add-on to provision a [PostgreSQL database](https://www.postgresql.org/), where I store the quotes for the couple servers where the bot operates. 
 
 # Adding the bot to your own server(s)
 
