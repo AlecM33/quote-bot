@@ -71,7 +71,7 @@ function query (queryParams) {
                 resolve(res.rows);
             }
         })).catch((e) => {
-            reject(new Error('The could not complete your request due to connection issues.'));
+            reject(new Error('The bot could not complete your request due to connection issues.'));
         });
     });
 }
