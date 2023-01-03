@@ -7,10 +7,10 @@ module.exports = {
         const author = interaction.options.getString('author').trim();
         const quote = interaction.options.getString('quote').trim();
         const result = await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
-            if (e.includes('duplicate key')) {
+            if (e.message.includes('duplicate key')) {
                 await interaction.reply(responseMessages.DUPLICATE_QUOTE);
             } else {
-                await interaction.reply(responseMessages.GENERIC_ERROR);
+                await interaction.reply(e.message);
             }
         });
 
