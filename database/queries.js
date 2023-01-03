@@ -70,6 +70,8 @@ function query (queryParams) {
                 client.release();
                 resolve(res.rows);
             }
-        }));
+        })).catch((e) => {
+            reject(e);
+        });
     });
 }
