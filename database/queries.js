@@ -65,7 +65,7 @@ function query (queryParams) {
         pool.connect().then((client) => client.query(queryParams, (err, res) => {
             if (err) {
                 client.release();
-                reject(err.message);
+                reject(err);
             } else {
                 client.release();
                 resolve(res.rows);
