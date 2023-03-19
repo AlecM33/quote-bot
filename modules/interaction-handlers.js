@@ -1,7 +1,15 @@
-const responseMessages = require('../response-messages.js');
+const responseMessages = require('./response-messages.js');
 const queries = require('../database/queries.js');
 
 module.exports = {
+
+    helpHandler: async (interaction) => {
+        try {
+            await interaction.reply(responseMessages.HELP_MESSAGE);
+        } catch (e) {
+            await interaction.reply(responseMessages.GENERIC_ERROR);
+        }
+    },
 
     addHandler: async (interaction) => {
         const author = interaction.options.getString('author').trim();

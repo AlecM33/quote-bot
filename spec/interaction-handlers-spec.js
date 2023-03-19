@@ -1,6 +1,6 @@
 const interactionHandlers = require('../modules/interaction-handlers.js');
 const queries = require('../database/queries.js');
-const responseMessages = require('../response-messages.js');
+const responseMessages = require('../modules/response-messages.js');
 
 describe('interaction handlers', () => {
     describe('#addHandler', () => {
