@@ -30,7 +30,7 @@ module.exports = {
     countHandler: async (interaction) => {
         const author = interaction.options.getString('author')?.trim();
         try {
-            const queryResult = author
+            const queryResult = author && author.length > 0
                 ? await queries.fetchQuoteCountByAuthor(author, interaction.guildId)
                 : await queries.fetchQuoteCount(interaction.guildId);
             if (queryResult.length > 0) {
@@ -50,7 +50,7 @@ module.exports = {
     randomHandler: async (interaction) => {
         const author = interaction.options.getString('author')?.trim();
         try {
-            const queryResult = author
+            const queryResult = author && author.length > 0
                 ? await queries.getQuotesFromAuthor(author, interaction.guildId)
                 : await queries.fetchAllQuotes(interaction.guildId);
             if (queryResult.length > 0) {
