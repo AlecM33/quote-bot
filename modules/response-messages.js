@@ -14,8 +14,8 @@ module.exports = {
     RANDOM_QUOTE_GENERIC_ERROR: 'There was a problem getting a random quote. Please try again later',
     EMPTY_QUERY: 'There were no quotes found matching your search.',
     QUERY_TOO_GENERAL: 'Your search returned too many results! Use a narrower search.',
-    HELP_MESSAGE: `This is a bot for adding quotes and revisiting them later. Add a quote with "/add". Find quotes with
-     "/search". Pull random quotes with "/random". To delete a quote, you must first search for it with the "include_identifier"
-      option as "true". This will return an integer ID for the quote. Then, provide that ID to the "/delete" command.\n\n
-      This bot is open source! Find it at: https://github.com/AlecM33/quote-bot`
+    HELP_MESSAGE: 'This is a bot for adding quotes and revisiting them later. Add a quote with `/add`. Find quotes with `/search`.' +
+        ' Pull random quotes with `/random`. To delete a quote, you must first search for it with the `include_identifier` ' +
+        'option as `true`. This will return an integer ID for the quote. Then, provide that ID to the `/delete` command.\n\n' +
+        'This bot is open source! Find it at: https://github.com/AlecM33/quote-bot'
 };
