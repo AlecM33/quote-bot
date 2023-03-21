@@ -1,5 +1,7 @@
 const responseMessages = require('./response-messages.js');
 const queries = require('../database/queries.js');
+const fs = require('fs');
+const { MessageAttachment } = require('discord.js');
 
 module.exports = {
 
@@ -7,6 +9,31 @@ module.exports = {
         try {
             await interaction.reply(responseMessages.HELP_MESSAGE);
         } catch (e) {
+            console.error(e);
+            await interaction.reply(responseMessages.GENERIC_ERROR);
+        }
+    },
+
+    downloadHandler: async (interaction) => {
+        let content = '';
+        try {
+            const allQuotesFromServer = await queries.fetchAllQuotes(interaction.guildId);
+            if (allQuotesFromServer.length === 0) {
+                await interaction.reply('There haven\'t been any quotes saved from this server, so I didn\'t attach a file.');
+                return;
+            }
+            for (const quote of allQuotesFromServer) {
+                const d = new Date(quote.said_at);
+                const year = d.getFullYear().toString().slice(2);
+                content += "\""
+                    + quote.quotation + "\" - "
+                    + quote.author
+                    + ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')\n';
+            }
+            const buffer = Buffer.from(content);
+            await interaction.reply({files: [new MessageAttachment(buffer,'quotes.txt')], content: 'Here you go: all the quotes saved from this server!'});
+        } catch (e) {
+            console.error(e);
             await interaction.reply(responseMessages.GENERIC_ERROR);
         }
     },
@@ -43,6 +70,7 @@ module.exports = {
                 await interaction.reply(responseMessages.QUOTE_COUNT_0);
             }
         } catch (e) {
+            console.error(e);
             await interaction.reply(responseMessages.GENERIC_ERROR_COUNT_COMMAND);
         }
     },
@@ -60,6 +88,7 @@ module.exports = {
                 await interaction.reply(responseMessages.NO_QUOTES_BY_AUTHOR);
             }
         } catch (e) {
+            console.error(e);
             await interaction.reply(responseMessages.RANDOM_QUOTE_GENERIC_ERROR);
         }
     },
