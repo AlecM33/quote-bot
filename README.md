@@ -3,7 +3,7 @@ A discord bot for saving and displaying memorable quotes from your friends.
 
 ![image](https://user-images.githubusercontent.com/24642328/179651423-3e55ca4c-92ec-4564-929e-0b154670aa83.png)
 
-![image](https://user-images.githubusercontent.com/24642328/180844788-43dfeceb-7d9c-4126-89ce-5fb8481eb19c.png)
+![image](https://user-images.githubusercontent.com/24642328/226762755-afa785d5-e741-426b-b73f-1a958c757c39.png)
 
 # Tech Stack
 
