@@ -30,7 +30,11 @@ module.exports = {
                     + ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')\n';
             }
             const buffer = Buffer.from(content);
-            await interaction.reply({files: [new MessageAttachment(buffer,'quotes.txt')], content: 'Here you go: all the quotes saved from this server!'});
+            await interaction.reply({
+                files: [new MessageAttachment(buffer,'quotes.txt')],
+                content: 'Here you go: all the quotes saved from this server!',
+                ephemeral: true
+            });
         } catch (e) {
             console.error(e);
             await interaction.reply(responseMessages.GENERIC_ERROR);

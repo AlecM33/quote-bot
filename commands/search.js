@@ -4,7 +4,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('search')
-        .setDescription('search for quotes.')
+        .setDescription('Search for quotes.')
         .addStringOption(option =>
             option.setName('search_string')
                 .setDescription('a keyword or keyphrase by which to search for quotes')

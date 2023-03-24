@@ -4,7 +4,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('add')
-        .setDescription('add a new quote.')
+        .setDescription('Add a new quote.')
         .addStringOption(option =>
             option.setName('author')
                 .setDescription('The person(s) who said this quote')

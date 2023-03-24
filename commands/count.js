@@ -4,7 +4,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('count')
-        .setDescription('get the total number of quotes saved, optionally filtering by author.')
+        .setDescription('See how many quotes are saved, optionally filtering by author.')
         .addStringOption(option =>
             option.setName('author')
                 .setDescription('the author by which to get the number of quotes')

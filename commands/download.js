@@ -4,7 +4,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('download')
-        .setDescription('receive a text file containing all your server\'s quotes'),
+        .setDescription('Receive a text file containing all your server\'s quotes.'),
     async execute (interaction) {
         await interactionHandlers.downloadHandler(interaction);
     }

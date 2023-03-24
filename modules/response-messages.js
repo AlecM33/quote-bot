@@ -17,7 +17,7 @@ module.exports = {
     HELP_MESSAGE: 'This is a bot for adding quotes and revisiting them later. Add a quote with `/add`. Find quotes with `/search`.' +
         ' Pull random quotes with `/random`. To delete a quote, you must first search for it with the `include_identifier` ' +
         'option as `true`. This will return an integer ID for the quote. Then, provide that ID to the `/delete` command.\n\n' +
-        '__**Privacy Policy**__\n\n' +
+        '**Privacy Policy:**\n\n' +
         'Quotes added in a particular server can only be retrieved by users in that server.' +
         'The bot uses an SSL connection to store your quotes in a password-protected database. Only the bot and its ' +
         'creator have access. Quotes and their authors are stored with encryption. The data is only used for this bot and its' +
