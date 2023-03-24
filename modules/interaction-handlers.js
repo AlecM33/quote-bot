@@ -1,16 +1,15 @@
 const responseMessages = require('./response-messages.js');
 const queries = require('../database/queries.js');
-const fs = require('fs');
 const { MessageAttachment } = require('discord.js');
 
 module.exports = {
 
     helpHandler: async (interaction) => {
         try {
-            await interaction.reply(responseMessages.HELP_MESSAGE);
+            await interaction.reply({ content: responseMessages.HELP_MESSAGE, ephemeral: true });
         } catch (e) {
             console.error(e);
-            await interaction.reply(responseMessages.GENERIC_ERROR);
+            await interaction.reply({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
         }
     },
 
