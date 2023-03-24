@@ -22,5 +22,6 @@ module.exports = {
         'The bot uses an SSL connection to store your quotes in a password-protected database. Only the bot and its ' +
         'creator have access. Quotes and their authors are stored with encryption. The data is only used for this bot and its ' +
         'associated commands.\n\n' +
+        'For questions or concerns, you can e-mail the creator at leohfx@gmail.com\n\n' +
         'This bot is open source! Find it at: https://github.com/AlecM33/quote-bot'
 };
