@@ -15,7 +15,7 @@ I currently host the bot using the [Heroku Cloud Platform](https://heroku.com). 
 
 Stored quotes are associated with a specific guild, so you can safely add the same instance of the bot to multiple servers. 
 
-For the bot to run, you need to populate 3 environment variables referenced within the code. These are `process.env.CLIENT_ID`, `process.env.DATABASE_URL`, and `process.env.TOKEN`. Read below for how to obtain these.
+For the bot to run, you need to populate 4 environment variables referenced within the code. These are `process.env.CLIENT_ID`, `process.env.DATABASE_URL`, `process.env.TOKEN`, and `process.env.ENCRYPTION_KEY`. Read below for how to obtain these.
 
 1. You'll need to [create a discord application through the developer portal](https://discord.com/developers/applications). Your application will be assigned an "Application ID" (aka client id), which can be referenced in the "General Information" section. This will be the value of `process.env.CLIENT_ID`. 
 
@@ -30,6 +30,8 @@ For the bot to run, you need to populate 3 environment variables referenced with
     `postgres://your-username:your-password@your-host:your-port/your-database-name`. 
     
 4. You'll need to populate the database with the appropriate schema. See the "Database Schema" section. 
+
+5. You'll need to set `process.env.ENCRYPTION_KEY` to a very strong password. This is used to encrypt several columns.
     
 5. You'll need to add the bot to your desired server. Within the "Bot" section of your Discord application, you can create a permissions integer that will be added to the OAuth link for a given bot. I recommend, at minimum, the "Send Messages", "Send Messages in Threads", and "Use Slash Commands" permissions, which produce integer `277025392640`. The link to add the bot would then be the following, with your application ID substituted in:
 
@@ -39,26 +41,7 @@ For the bot to run, you need to populate 3 environment variables referenced with
 
 # Database Schema
 
-The database has one table. The following should be all that is necessary to run:
-
-```
-CREATE EXTENSION citext;
-
-CREATE COLLATION ci ( // case-insensitive collation for the author column.
-  provider = 'icu',
-  locale = 'utf-8@colStrength=secondary',
-  deterministic = false
-);
-
-CREATE TABLE quotes(
-    id SERIAL,
-    quotation citext NOT NULL,
-    author character varying(64) COLLATE ci NOT NULL,
-    said_at date NOT NULL,
-    guild_id character varying(64) NOT NULL,
-    CONSTRAINT quotes_pkey PRIMARY KEY (quotation, author, guild_id)
-);
-```
+see `database/schema.sql`.
 
 documentation for the "citext" datatype for PostgreSQL 14: https://www.postgresql.org/docs/current/citext.html
 

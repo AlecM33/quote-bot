@@ -49,7 +49,7 @@ describe('interaction handlers', () => {
         it('should throw a duplicate key exception', async () => {
             spyOn(queries, 'addQuote').and.callFake(async (quote, author, guildId) => {
                 interaction.replied = true;
-                throw 'duplicate key error';
+                throw new Error('could not connect to database');
             });
             try {
                 await interactionHandlers.addHandler(interaction);
@@ -62,7 +62,7 @@ describe('interaction handlers', () => {
         it('should throw a generic exception', async () => {
             spyOn(queries, 'addQuote').and.callFake(async (quote, author, guildId) => {
                 interaction.replied = true;
-                throw 'could not connect to database';
+                throw new Error('could not connect to database');
             });
             try {
                 await interactionHandlers.addHandler(interaction);
