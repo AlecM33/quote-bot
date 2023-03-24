@@ -139,7 +139,7 @@ module.exports = {
 function formatQuote (quote, includeDate = true, includeIdentifier = false) {
     let quoteMessage = '';
     const d = new Date(quote.said_at);
-    const year = d.getFullYear().toString().slice(2);
+    const year = d.getFullYear().toString();
 
     quoteMessage += '_"' + quote.quotation + '"_ - ' + quote.author
 
