@@ -11,7 +11,7 @@ The bot is written in javascript and makes heavy use of [discord.js](https://dis
 
 I currently host the bot using the [Heroku Cloud Platform](https://heroku.com). The bot speaks to a PostgreSQL instance hosted for free on [ElephantSQL](https://www.elephantsql.com/), where I store quotes from the few servers where the bot operates. The bot's connection to the database is SSL-enabled. Quotes, authors, and guild IDs are stored with encryption.
 
-# Adding the bot to your own server(s)
+# Running your own instance of the bot
 
 Stored quotes are associated with a specific guild, so you can safely add the same instance of the bot to multiple servers. 
 
