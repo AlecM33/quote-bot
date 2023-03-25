@@ -23,15 +23,15 @@ module.exports = {
             }
             for (const quote of allQuotesFromServer) {
                 const d = new Date(quote.said_at);
-                const year = d.getFullYear().toString().slice(2);
-                content += "\""
-                    + quote.quotation + "\" - "
-                    + quote.author
-                    + ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')\n';
+                const year = d.getFullYear().toString();
+                content += '"' +
+                    quote.quotation + '" - ' +
+                    quote.author +
+                    ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')\n';
             }
             const buffer = Buffer.from(content);
             await interaction.reply({
-                files: [new MessageAttachment(buffer,'quotes.txt')],
+                files: [new MessageAttachment(buffer, 'quotes.txt')],
                 content: 'Here you go: all the quotes saved from this server!',
                 ephemeral: true
             });
@@ -141,7 +141,7 @@ function formatQuote (quote, includeDate = true, includeIdentifier = false) {
     const d = new Date(quote.said_at);
     const year = d.getFullYear().toString();
 
-    quoteMessage += '_"' + quote.quotation + '"_ - ' + quote.author
+    quoteMessage += '_"' + quote.quotation + '"_ - ' + quote.author;
 
     if (includeDate) {
         quoteMessage += ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')';

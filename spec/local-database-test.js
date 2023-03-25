@@ -4,10 +4,10 @@ const verify = (label, booleanExpression) => {
     console.log(label + ': ');
     console.log(
         booleanExpression
-        ? '\x1b[32msuccess\x1b[0m'
-        : '\x1b[31mfailure\x1b[0m'
+            ? '\x1b[32msuccess\x1b[0m'
+            : '\x1b[31mfailure\x1b[0m'
     );
-}
+};
 
 queries.addQuote('test', 'jane', '1').then((addResult) => {
     console.log(addResult);
@@ -23,9 +23,9 @@ queries.addQuote('test', 'jane', '1').then((addResult) => {
             queries.fetchQuoteCountByAuthor('jane', '1')
         ]
     ).then((promiseResults) => {
-        for (let result of promiseResults) {
+        for (const result of promiseResults) {
             console.log(result);
-            verify('query returned a non-empty result', result.length > 0)
+            verify('query returned a non-empty result', result.length > 0);
         }
         queries.deleteQuoteById(addedQuoteId, '1').then((deletionResult) => {
             console.log(deletionResult);
@@ -40,6 +40,6 @@ queries.addQuote('test', 'jane', '1').then((addResult) => {
             );
             console.log('complete.');
             process.exit(0);
-        })
-    })
+        });
+    });
 });

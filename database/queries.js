@@ -21,7 +21,7 @@ module.exports = {
         guildId,
         saidAt = (() => {
             const now = new Date(Date.now());
-            return (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()
+            return (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear();
         })()
     ) => {
         return query({
