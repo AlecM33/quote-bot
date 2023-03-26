@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jasmine",
     "test:db": "SET NODE_ENV=development && SET DATABASE_URL=<your-database-url> && SET ENCRYPTION_KEY=<your-test-key> && node ./spec/local-database-test.js",
-    "start": "NODE_ENV=production && node deploy-commands.js && node main.js",
+    "start": "SET NODE_ENV=production && node deploy-commands.js && node main.js",
     "start:dev": "SET NODE_ENV=development && SET DATABASE_URL=<your-url-here> && SET TOKEN=<your-token-here> && SET CLIENT_ID=<your-client-id-here> && node deploy-commands.js && node main.js"
   },
   "repository": {
@@ -22,9 +22,14 @@
   "dependencies": {
     "@discordjs/builders": "^1.0.0",
     "@discordjs/rest": "^1.0.0",
+    "canvas": "^2.11.0",
+    "d3": "^7.8.3",
+    "d3-cloud": "^1.2.5",
     "discord-api-types": "^0.36.2",
     "discord.js": "^13.14.0",
-    "pg": "^8.5.1"
+    "jsdom": "^21.1.1",
+    "pg": "^8.5.1",
+    "randomcolor": "^0.6.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
