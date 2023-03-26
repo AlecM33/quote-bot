@@ -11,7 +11,11 @@ module.exports = {
                 .setMinValue(1)
                 .setMaxValue(3)
                 .setRequired(false)
-        ),
+        )
+        .addStringOption(option =>
+            option.setName('author')
+                .setDescription('Generate a wordcloud from a specific author')
+                .setRequired(false)),
     async execute (interaction) {
         await interactionHandlers.wordcloudHandler(interaction);
     }
