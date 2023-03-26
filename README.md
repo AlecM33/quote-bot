@@ -3,7 +3,17 @@ A discord bot for saving and displaying memorable quotes from your friends.
 
 ![image](https://user-images.githubusercontent.com/24642328/179651423-3e55ca4c-92ec-4564-929e-0b154670aa83.png)
 
-![image](https://user-images.githubusercontent.com/24642328/226762755-afa785d5-e741-426b-b73f-1a958c757c39.png)
+<img src='https://user-images.githubusercontent.com/24642328/227757021-ada37249-8e6d-41fa-86a7-529d907e6295.png' width=650/>
+
+
+`/add` - add a quote by a specified author.<br>
+`/random` - display a random quote, optionally by author.<br>
+`/search` - search for quotes by a string of text. You can also choose to include a quote's numerical identifier in the search results, which can be used to delete the quote.<br>
+`/delete` - delete a quote by its numerical identifier. The identifier is obtained using the "search" command and supplying the "include_identifier" parameter as "True".<br>
+`/download` - (response visible to only the sender) receive a text file containing all your server's quotes.<br>
+`/wordcloud` - Generate a colorful cloud of words from the quotes said in your server! The size of a word is proportional to how often it's been said.<br>
+`/count` - get the number of quotes saved, optionally by author.<br>
+`/help` - (response visible to only the sender) info on the bot and how to use it, the privacy policy, and support resources.
 
 # Tech Stack
 
