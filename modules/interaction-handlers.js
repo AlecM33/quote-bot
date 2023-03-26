@@ -108,10 +108,11 @@ module.exports = {
     },
 
     searchHandler: async (interaction) => {
+        await interaction.deferReply();
         const searchString = interaction.options.getString('search_string')?.trim();
         const includeIdentifier = interaction.options.getBoolean('include_identifier');
         const searchResults = await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
-            await interaction.reply({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
+            await interaction.followUp({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
         });
 
         let reply = '';
@@ -128,7 +129,7 @@ module.exports = {
         }
 
         if (!interaction.replied) {
-            await interaction.reply(reply);
+            await interaction.followUp(reply);
         }
     },
 
