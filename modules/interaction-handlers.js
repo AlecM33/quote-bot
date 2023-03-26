@@ -153,21 +153,25 @@ module.exports = {
             2: 'SIZE_MEDIUM',
             3: 'SIZE_LARGE'
         };
+        const MAX_WORDS = 300;
         global.document = new JSDOM().window.document;
-        const allQuotesFromGuild = await queries.fetchAllQuotes(interaction.guildId);
-        if (allQuotesFromGuild.length === 0) {
+        const author = interaction.options.getString('author')?.trim();
+        const quotesForCloud = author && author.length > 0
+            ? await queries.getQuotesFromAuthor(author,  interaction.guildId)
+            : await queries.fetchAllQuotes(interaction.guildId)
+        if (quotesForCloud.length === 0) {
             await interaction.followUp({
-                content: 'There are no quotes to generate a wordcloud from!',
+                content: 'I didn\'t find any quotes to generate a wordcloud from!',
                 ephemeral: true
             });
             return;
         }
-        const wordsWithOccurrences = mapQuotesToFrequencies(allQuotesFromGuild);
+        const wordsWithOccurrences = mapQuotesToFrequencies(quotesForCloud);
         const constructor = await wordcloudConstructor;
         const initializationResult = constructor.initialize(
             wordsWithOccurrences
                 .sort((a, b) => a.frequency >= b.frequency ? -1 : 1)
-                .slice(0, 300),
+                .slice(0, MAX_WORDS),
             SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM'
         );
         initializationResult.cloud.on('end', () => {
@@ -215,9 +219,9 @@ function formatQuote (quote, includeDate = true, includeIdentifier = false) {
     return quoteMessage;
 }
 
-function mapQuotesToFrequencies (allQuotesFromGuild) {
+function mapQuotesToFrequencies (quotesForCloud) {
     const wordsWithOccurrences = [];
-    for (const quote of allQuotesFromGuild) {
+    for (const quote of quotesForCloud) {
         const words = quote.quotation
             .split(' ')
             .map((word) => word.toLowerCase().replace(/[^a-zA-Z0-9']/g, ''))
