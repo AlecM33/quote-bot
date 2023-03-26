@@ -1,19 +1,30 @@
 const responseMessages = require('./response-messages.js');
 const queries = require('../database/queries.js');
 const { MessageAttachment } = require('discord.js');
+const STOP_WORDS = require('../modules/stop-words');
+const wordcloudConstructor = require('../modules/wordcloud-constructor');
+const { JSDOM } = require('jsdom');
+const canvas = require('canvas');
 
 module.exports = {
 
     helpHandler: async (interaction) => {
         try {
-            await interaction.reply({ content: responseMessages.HELP_MESSAGE, ephemeral: true });
+            await interaction.reply({
+                content: responseMessages.HELP_MESSAGE,
+                ephemeral: true
+            });
         } catch (e) {
             console.error(e);
-            await interaction.reply({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
+            await interaction.reply({
+                content: responseMessages.GENERIC_ERROR,
+                ephemeral: true
+            });
         }
     },
 
     downloadHandler: async (interaction) => {
+        await interaction.deferReply({ ephemeral: true });
         let content = '';
         try {
             const allQuotesFromServer = await queries.fetchAllQuotes(interaction.guildId);
@@ -30,14 +41,14 @@ module.exports = {
                     ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')\n';
             }
             const buffer = Buffer.from(content);
-            await interaction.reply({
+            await interaction.followUp({
                 files: [new MessageAttachment(buffer, 'quotes.txt')],
                 content: 'Here you go: all the quotes saved from this server!',
                 ephemeral: true
             });
         } catch (e) {
             console.error(e);
-            await interaction.reply(responseMessages.GENERIC_ERROR);
+            await interaction.reply({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
         }
     },
 
@@ -46,7 +57,7 @@ module.exports = {
         const quote = interaction.options.getString('quote').trim();
         const result = await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
             if (e.message.includes('duplicate key')) {
-                await interaction.reply(responseMessages.DUPLICATE_QUOTE);
+                await interaction.reply({ content: responseMessages.DUPLICATE_QUOTE, ephemeral: true });
             } else {
                 await interaction.reply(e.message);
             }
@@ -74,7 +85,7 @@ module.exports = {
             }
         } catch (e) {
             console.error(e);
-            await interaction.reply(responseMessages.GENERIC_ERROR_COUNT_COMMAND);
+            await interaction.reply({ content: responseMessages.GENERIC_ERROR_COUNT_COMMAND, ephemeral: true });
         }
     },
 
@@ -92,7 +103,7 @@ module.exports = {
             }
         } catch (e) {
             console.error(e);
-            await interaction.reply(responseMessages.RANDOM_QUOTE_GENERIC_ERROR);
+            await interaction.reply({ content: responseMessages.RANDOM_QUOTE_GENERIC_ERROR, ephemeral: true });
         }
     },
 
@@ -100,7 +111,7 @@ module.exports = {
         const searchString = interaction.options.getString('search_string')?.trim();
         const includeIdentifier = interaction.options.getBoolean('include_identifier');
         const searchResults = await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
-            await interaction.reply(responseMessages.GENERIC_ERROR);
+            await interaction.reply({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
         });
 
         let reply = '';
@@ -123,16 +134,66 @@ module.exports = {
 
     deleteHandler: async (interaction) => {
         const result = await queries.deleteQuoteById(interaction.options.getInteger('identifier'), interaction.guildId).catch(async (e) => {
-            await interaction.reply(responseMessages.GENERIC_ERROR);
+            await interaction.reply({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
         });
 
         if (!interaction.replied) {
             if (result.length === 0) {
-                await interaction.reply(responseMessages.NOTHING_DELETED);
+                await interaction.reply({ content: responseMessages.NOTHING_DELETED, ephemeral: true });
             } else {
                 await interaction.reply('The following quote was deleted: \n\n' + formatQuote(result[0], true, false));
             }
         }
+    },
+
+    wordcloudHandler: async (interaction) => {
+        await interaction.deferReply();
+        const SIZE_MAP = {
+            1: 'SIZE_SMALL',
+            2: 'SIZE_MEDIUM',
+            3: 'SIZE_LARGE'
+        };
+        global.document = new JSDOM().window.document;
+        const allQuotesFromGuild = await queries.fetchAllQuotes(interaction.guildId);
+        if (allQuotesFromGuild.length === 0) {
+            await interaction.followUp({
+                content: 'There are no quotes to generate a wordcloud from!',
+                ephemeral: true
+            });
+            return;
+        }
+        const wordsWithOccurrences = mapQuotesToFrequencies(allQuotesFromGuild);
+        const constructor = await wordcloudConstructor;
+        const initializationResult = constructor.initialize(
+            wordsWithOccurrences
+                .sort((a, b) => a.frequency >= b.frequency ? -1 : 1)
+                .slice(0, 300),
+            SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM'
+        );
+        initializationResult.cloud.on('end', () => {
+            const d3 = constructor.draw(
+                initializationResult.cloud,
+                initializationResult.words,
+                document.body
+            );
+            const img = new canvas.Image();
+            img.onload = async () => {
+                const myCanvas = canvas.createCanvas(
+                    initializationResult.config[SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM'],
+                    initializationResult.config[SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM']
+                );
+                const myContext = myCanvas.getContext('2d');
+                myContext.drawImage(img, 0, 0);
+                await interaction.followUp({
+                    files: [new MessageAttachment(myCanvas.toBuffer('image/png'), 'wordcloud.png')],
+                    content: 'Here\'s a wordcloud I generated from this server\'s quotes! The bigger the word, the more often it\'s been said.'
+                });
+            };
+            img.onerror = err => { throw err; };
+            img.src = 'data:image/svg+xml;base64,' + btoa(
+                decodeURIComponent(encodeURIComponent(d3.select(global.document.body).node().innerHTML)));
+        });
+        initializationResult.cloud.start();
     }
 };
 
@@ -152,4 +213,26 @@ function formatQuote (quote, includeDate = true, includeIdentifier = false) {
     }
 
     return quoteMessage;
+}
+
+function mapQuotesToFrequencies (allQuotesFromGuild) {
+    const wordsWithOccurrences = [];
+    for (const quote of allQuotesFromGuild) {
+        const words = quote.quotation
+            .split(' ')
+            .map((word) => word.toLowerCase().replace(/[^a-zA-Z0-9']/g, ''))
+            .filter((word) => word.length > 0 && !STOP_WORDS.includes(word));
+        for (const word of words) {
+            const existingWord = wordsWithOccurrences.find((element) => element.word === word);
+            if (existingWord) {
+                existingWord.frequency ++;
+            } else {
+                wordsWithOccurrences.push({
+                    word,
+                    frequency: 1
+                });
+            }
+        }
+    }
+    return wordsWithOccurrences;
 }
