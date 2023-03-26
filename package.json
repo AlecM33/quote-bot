@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jasmine",
     "test:db": "SET NODE_ENV=development && SET DATABASE_URL=<your-database-url> && SET ENCRYPTION_KEY=<your-test-key> && node ./spec/local-database-test.js",
-    "start": "SET NODE_ENV=production && node deploy-commands.js && node main.js",
+    "start": "NODE_ENV=production && node deploy-commands.js && node main.js",
     "start:dev": "SET NODE_ENV=development && SET DATABASE_URL=<your-url-here> && SET TOKEN=<your-token-here> && SET CLIENT_ID=<your-client-id-here> && node deploy-commands.js && node main.js"
   },
   "repository": {
