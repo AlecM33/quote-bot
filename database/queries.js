@@ -67,7 +67,7 @@ module.exports = {
 
     fetchQuoteCount: (guildId) => {
         return query({
-            text: 'SELECT COUNT(*) FROM quotes guild_id = $1;',
+            text: 'SELECT COUNT(*) FROM quotes WHERE guild_id = $1;',
             values: [guildId]
         });
     },
