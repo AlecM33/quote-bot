@@ -8,10 +8,10 @@ module.exports = {
             text: `SELECT
                      id,
                      PGP_SYM_DECRYPT(quotation::bytea, $1) as quotation,
-                     PGP_SYM_DECRYPT(author::bytea, $2) as author,
+                     author,
                      said_at
-                   FROM quotes WHERE PGP_SYM_DECRYPT(guild_id::bytea, $3) = $4;`,
-            values: [encryptionKey, encryptionKey, encryptionKey, guildId]
+                   FROM quotes WHERE guild_id = $2;`,
+            values: [encryptionKey, guildId]
         });
     },
 
@@ -28,25 +28,22 @@ module.exports = {
             text: `INSERT INTO quotes VALUES (
                 DEFAULT,
                 PGP_SYM_ENCRYPT($1, $2)::text,
-                PGP_SYM_ENCRYPT($3, $4)::text,
+                $3,
+                $4,
                 $5,
-                PGP_SYM_ENCRYPT($6, $7)::text,
-                digest($8, 'sha256')
+                digest($6, 'sha256')
             ) RETURNING
                 id,
-                PGP_SYM_DECRYPT(quotation::bytea, $9) as quotation,
-                PGP_SYM_DECRYPT(author::bytea, $10) as author,
+                PGP_SYM_DECRYPT(quotation::bytea, $7) as quotation,
+                author,
                 said_at;`,
             values: [
                 quote,
                 encryptionKey,
                 author,
-                encryptionKey,
                 saidAt,
                 guildId,
-                encryptionKey,
-                guildId + quote + author,
-                encryptionKey,
+                guildId.toLowerCase() + quote.toLowerCase() + author.toLowerCase(),
                 encryptionKey
             ]
         });
@@ -57,15 +54,12 @@ module.exports = {
             text: `SELECT
                      id,
                      PGP_SYM_DECRYPT(quotation::bytea, $1) as quotation,
-                     PGP_SYM_DECRYPT(author::bytea, $2) as author,
+                     author,
                      said_at
-                   FROM quotes WHERE PGP_SYM_DECRYPT(author::bytea, $3) = $4 AND PGP_SYM_DECRYPT(guild_id::bytea, $5) = $6;`,
+                   FROM quotes WHERE author = $2 AND guild_id = $3;`,
             values: [
                 encryptionKey,
-                encryptionKey,
-                encryptionKey,
                 author,
-                encryptionKey,
                 guildId
             ]
         });
@@ -73,15 +67,15 @@ module.exports = {
 
     fetchQuoteCount: (guildId) => {
         return query({
-            text: 'SELECT COUNT(*) FROM quotes WHERE PGP_SYM_DECRYPT(guild_id::bytea, $1) = $2;',
-            values: [encryptionKey, guildId]
+            text: 'SELECT COUNT(*) FROM quotes guild_id = $1;',
+            values: [guildId]
         });
     },
 
     fetchQuoteCountByAuthor: (author, guildId) => {
         return query({
-            text: 'SELECT COUNT(*) FROM quotes WHERE PGP_SYM_DECRYPT(author::bytea, $1) = $2 AND PGP_SYM_DECRYPT(guild_id::bytea, $3) = $4;',
-            values: [encryptionKey, author, encryptionKey, guildId]
+            text: 'SELECT COUNT(*) FROM quotes WHERE author = $1 AND guild_id = $2;',
+            values: [author, guildId]
         });
     },
 
@@ -90,15 +84,13 @@ module.exports = {
             text: `SELECT
                       id,
                       PGP_SYM_DECRYPT(quotation::bytea, $1) as quotation,
-                      PGP_SYM_DECRYPT(author::bytea, $2) as author,
+                      author,
                       said_at FROM quotes
-                   WHERE PGP_SYM_DECRYPT(quotation::bytea, $3) LIKE $4 AND PGP_SYM_DECRYPT(guild_id::bytea, $5) = $6;`,
+                   WHERE PGP_SYM_DECRYPT(quotation::bytea, $2) LIKE $3 AND guild_id = $4;`,
             values: [
                 encryptionKey,
                 encryptionKey,
-                encryptionKey,
                 '%' + searchString + '%',
-                encryptionKey,
                 guildId
             ]
         });
@@ -106,12 +98,12 @@ module.exports = {
 
     deleteQuoteById: (id, guildId) => {
         return query({
-            text: `DELETE FROM quotes WHERE id = $1 AND PGP_SYM_DECRYPT(guild_id::bytea, $2) = $3 RETURNING
+            text: `DELETE FROM quotes WHERE id = $1 AND guild_id = $2 RETURNING
                      id,
-                     PGP_SYM_DECRYPT(quotation::bytea, $4) as quotation,
-                     PGP_SYM_DECRYPT(author::bytea, $5) as author,
+                     PGP_SYM_DECRYPT(quotation::bytea, $3) as quotation,
+                     author,
                      said_at;`,
-            values: [id, encryptionKey, guildId, encryptionKey, encryptionKey]
+            values: [id, guildId, encryptionKey]
         });
     }
 
