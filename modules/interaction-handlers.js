@@ -190,7 +190,9 @@ module.exports = {
                 myContext.drawImage(img, 0, 0);
                 await interaction.followUp({
                     files: [new MessageAttachment(myCanvas.toBuffer('image/png'), 'wordcloud.png')],
-                    content: 'Here\'s a wordcloud I generated from this server\'s quotes! The bigger the word, the more often it\'s been said.'
+                    content: author && author.length > 0
+                        ? 'Here\'s a wordcloud for quotes said by "' + author + '"!'
+                        : 'Here\'s a wordcloud I generated from this server\'s quotes!'
                 });
             };
             img.onerror = err => { throw err; };
