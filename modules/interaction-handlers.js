@@ -55,6 +55,9 @@ module.exports = {
     addHandler: async (interaction) => {
         const author = interaction.options.getString('author').trim();
         const quote = interaction.options.getString('quote').trim();
+        if (quote.includes('http://') || quote.includes('https://')) {
+            await interaction.reply({ content: 'Quotes with links are disallowed.', ephemeral: true });
+        }
         const result = await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
             if (e.message.includes('duplicate key')) {
                 await interaction.reply({ content: responseMessages.DUPLICATE_QUOTE, ephemeral: true });
