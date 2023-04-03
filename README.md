@@ -1,12 +1,14 @@
 # quote-bot
 
-<img src='./servers-badge.svg'/>
+<span>
+    <img src='./servers-badge.svg'/>
+    <img src='./quotes-stored-badge.svg'/>
+</span>
+<br><br>
 A discord bot for saving and displaying memorable quotes from your friends.
+<br>
 
-![image](https://user-images.githubusercontent.com/24642328/179651423-3e55ca4c-92ec-4564-929e-0b154670aa83.png)
-
-<img src='https://user-images.githubusercontent.com/24642328/227757021-ada37249-8e6d-41fa-86a7-529d907e6295.png' width=650/>
-
+### Add this bot to your server via top.gg: https://top.gg/bot/777314683333771285, or read below for how to set up your own instance. 
 
 `/add` - add a quote by a specified author.<br>
 `/random` - display a random quote, optionally by author.<br>
@@ -16,6 +18,10 @@ A discord bot for saving and displaying memorable quotes from your friends.
 `/wordcloud` - Generate a colorful cloud of words from the quotes said in your server! The size of a word is proportional to how often it's been said.<br>
 `/count` - get the number of quotes saved, optionally by author.<br>
 `/help` - (response visible to only the sender) info on the bot and how to use it, the privacy policy, and support resources.
+
+![image](https://user-images.githubusercontent.com/24642328/179651423-3e55ca4c-92ec-4564-929e-0b154670aa83.png)
+
+<img src='https://user-images.githubusercontent.com/24642328/227757021-ada37249-8e6d-41fa-86a7-529d907e6295.png' width=650/>
 
 # Tech Stack
 
