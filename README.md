@@ -1,4 +1,6 @@
 # quote-bot
+
+<img src='./servers-badge.svg'/>
 A discord bot for saving and displaying memorable quotes from your friends.
 
 ![image](https://user-images.githubusercontent.com/24642328/179651423-3e55ca4c-92ec-4564-929e-0b154670aa83.png)
