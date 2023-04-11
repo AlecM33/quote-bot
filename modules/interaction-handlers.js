@@ -211,7 +211,6 @@ function formatQuote (quote, includeDate = true, includeIdentifier = false) {
     const quoteCharacters = ['"', '“', '”']
     let quoteMessage = quote.quotation;
     const d = new Date(quote.said_at);
-    const year = d.getFullYear().toString();
 
     if (!quoteCharacters.includes(quoteMessage.charAt(0))) {
         quoteMessage = '"' + quoteMessage;
@@ -224,7 +223,11 @@ function formatQuote (quote, includeDate = true, includeIdentifier = false) {
     quoteMessage = '_' + quoteMessage + '_ - ' + quote.author; // includes markdown for italics
 
     if (includeDate) {
-        quoteMessage += ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')';
+        quoteMessage += ' (added ' + d.toLocaleString('default',  {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        }) + ')';
     }
 
     if (includeIdentifier) {
