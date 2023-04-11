@@ -213,7 +213,6 @@ function formatQuote (quote, includeDate = true, includeIdentifier = false) {
     const d = new Date(quote.said_at);
     const year = d.getFullYear().toString();
 
-    // If quotes were added with quotation marks already, don't add them redundantly
     if (!quoteCharacters.includes(quoteMessage.charAt(0))) {
         quoteMessage = '"' + quoteMessage;
     }
@@ -222,7 +221,7 @@ function formatQuote (quote, includeDate = true, includeIdentifier = false) {
         quoteMessage = quoteMessage + '"';
     }
 
-    quoteMessage = "_" + quoteMessage + "_" // markdown for italics
+    quoteMessage = '_' + quoteMessage + '_ - ' + quote.author; // includes markdown for italics
 
     if (includeDate) {
         quoteMessage += ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')';
