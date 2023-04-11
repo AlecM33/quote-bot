@@ -21,6 +21,7 @@ module.exports = {
         'This is not case-sensitive. There is an option called `include_identifier` which, if sent as true, will return a numerical' +
         ' ID for each quote. This is used with the `/delete` command to remove a quote from those saved.\n\n' +
         'Pull random quotes with `/random`.\n\n' +
+        'You can receive all the quotes you have saved at any time using `/download`.\n\n' +
         'To delete a quote, you must first search for it with the `include_identifier` ' +
         'option as `true`. This will return an integer ID for the quote. Then, provide that ID to the `/delete` command.\n\n' +
         'You can also generate a "wordcloud" visualization of quotes said in your server using `/wordcloud`.\n\n' +
