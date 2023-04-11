@@ -208,11 +208,21 @@ module.exports = {
 };
 
 function formatQuote (quote, includeDate = true, includeIdentifier = false) {
-    let quoteMessage = '';
+    const quoteCharacters = ['"', '“']
+    let quoteMessage = quote.quotation;
     const d = new Date(quote.said_at);
     const year = d.getFullYear().toString();
 
-    quoteMessage += '_"' + quote.quotation + '"_ - ' + quote.author;
+    // If quotes were added with quotation marks already, don't add them redundantly
+    if (!quoteCharacters.includes(quoteMessage.charAt(0))) {
+        quoteMessage = '"' + quoteMessage;
+    }
+
+    if (!quoteCharacters.includes(quoteMessage.charAt(quoteMessage.length - 1))) {
+        quoteMessage = quoteMessage + '"';
+    }
+
+    quoteMessage = "_" + quoteMessage + "_" // markdown for italics
 
     if (includeDate) {
         quoteMessage += ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')';

@@ -86,7 +86,7 @@ module.exports = {
                       PGP_SYM_DECRYPT(quotation::bytea, $1) as quotation,
                       author,
                       said_at FROM quotes
-                   WHERE PGP_SYM_DECRYPT(quotation::bytea, $2) LIKE $3 AND guild_id = $4;`,
+                   WHERE LOWER(PGP_SYM_DECRYPT(quotation::bytea, $2)) LIKE LOWER($3) AND guild_id = $4;`,
             values: [
                 encryptionKey,
                 encryptionKey,
