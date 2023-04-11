@@ -14,10 +14,16 @@ module.exports = {
     RANDOM_QUOTE_GENERIC_ERROR: 'There was a problem getting a random quote. Please try again later',
     EMPTY_QUERY: 'There were no quotes found matching your search.',
     QUERY_TOO_GENERAL: 'Your search returned too many results! Use a narrower search.',
-    HELP_MESSAGE: '**About:**\n\nThis is a bot for adding quotes and revisiting them later. Add a quote with `/add`. Find quotes with `/search`.' +
-        ' Pull random quotes with `/random`. To delete a quote, you must first search for it with the `include_identifier` ' +
-        'option as `true`. This will return an integer ID for the quote. Then, provide that ID to the `/delete` command.' +
-        ' You can also generate a "wordcloud" visualization of quotes said in your server using `/wordcloud`.\n\n' +
+    HELP_MESSAGE: '**About:**\n\nThis is a bot for adding quotes and revisiting them later. Add a quote with `/add`.' +
+        ' The author can be a mention of a user in the server (e.g. @Bob) or simply a name (Bob). The quotation can be ' +
+        'entered as it is - there is no need to wrap it in quotation marks.\n\n' +
+        'Find quotes with `/search`. You can enter a word or phrase, and the bot will give you the quotes that match. ' +
+        'This is not case-sensitive. There is an option called `include_identifier` which, if sent as true, will return a numerical' +
+        ' ID for each quote. This is used with the `/delete` command to remove a quote from those saved.\n\n' +
+        'Pull random quotes with `/random`.\n\n' +
+        'To delete a quote, you must first search for it with the `include_identifier` ' +
+        'option as `true`. This will return an integer ID for the quote. Then, provide that ID to the `/delete` command.\n\n' +
+        'You can also generate a "wordcloud" visualization of quotes said in your server using `/wordcloud`.\n\n' +
         '**Privacy Policy:**\n\n' +
         'Quotes added in a particular server can only be retrieved by users in that server. ' +
         'The bot uses an SSL connection to store your quotes in a password-protected database. Only the bot and its ' +
