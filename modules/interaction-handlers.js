@@ -33,7 +33,7 @@ module.exports = {
                 return;
             }
             for (const quote of allQuotesFromServer) {
-                content += formatQuote(quote) + '\n';
+                content += formatQuote(quote, true, false, false) + '\n';
             }
             const buffer = Buffer.from(content);
             await interaction.followUp({
@@ -202,7 +202,7 @@ module.exports = {
     }
 };
 
-function formatQuote (quote, includeDate = true, includeIdentifier = false) {
+function formatQuote (quote, includeDate = true, includeIdentifier = false, includeMarkdown = true) {
     const quoteCharacters = ['"', '“', '”']
     let quoteMessage = quote.quotation;
     const d = new Date(quote.said_at);
@@ -215,7 +215,11 @@ function formatQuote (quote, includeDate = true, includeIdentifier = false) {
         quoteMessage = quoteMessage + '"';
     }
 
-    quoteMessage = '_' + quoteMessage + '_ - ' + quote.author; // includes markdown for italics
+    if (includeMarkdown) {
+        quoteMessage = '_' + quoteMessage + '_';
+    }
+
+    quoteMessage = quoteMessage + ' - ' + quote.author;
 
     if (includeDate) {
         quoteMessage += ' (added ' + d.toLocaleString('default',  {
