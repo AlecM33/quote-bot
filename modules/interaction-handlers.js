@@ -208,7 +208,7 @@ module.exports = {
 };
 
 function formatQuote (quote, includeDate = true, includeIdentifier = false) {
-    const quoteCharacters = ['"', '“']
+    const quoteCharacters = ['"', '“', '”']
     let quoteMessage = quote.quotation;
     const d = new Date(quote.said_at);
     const year = d.getFullYear().toString();
