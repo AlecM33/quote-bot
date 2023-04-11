@@ -11,7 +11,7 @@ module.exports = {
                 .setRequired(true))
         .addStringOption(option =>
             option.setName('author')
-                .setDescription('The person(s) who said this quote')
+                .setDescription('The person(s) who said it')
                 .setRequired(true)),
     async execute (interaction) {
         await interactionHandlers.addHandler(interaction);
