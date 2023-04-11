@@ -33,12 +33,7 @@ module.exports = {
                 return;
             }
             for (const quote of allQuotesFromServer) {
-                const d = new Date(quote.said_at);
-                const year = d.getFullYear().toString();
-                content += '"' +
-                    quote.quotation + '" - ' +
-                    quote.author +
-                    ' (' + (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + year + ')\n';
+                content += formatQuote(quote) + '\n';
             }
             const buffer = Buffer.from(content);
             await interaction.followUp({
