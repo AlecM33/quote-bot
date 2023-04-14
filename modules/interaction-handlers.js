@@ -213,6 +213,29 @@ module.exports = {
                 decodeURIComponent(encodeURIComponent(d3.select(global.document.body).node().innerHTML)));
         });
         initializationResult.cloud.start();
+    },
+
+    authorsHandler: async (interaction) => {
+        try {
+            const queryResult = await queries.fetchUniqueAuthors(interaction.guildId)
+            if (queryResult.length > 0) {
+                let reply = queryResult.map(row => row.author)
+                    .sort((a, b) => a.localeCompare(b))
+                    .reduce((accumulator, value, index) => {
+                        if (index === 0) {
+                            return accumulator + value
+                        } else {
+                            return accumulator + ', ' + value
+                        }
+                    },  '');
+                await interaction.reply('Here are all the different authors of this server\'s quotes: \n\n' + reply);
+            } else {
+                await interaction.reply(responseMessages.QUOTE_COUNT_0);
+            }
+        } catch (e) {
+            console.error(e);
+            await interaction.reply({ content: responseMessages.GENERIC_INTERACTION_ERROR, ephemeral: true });
+        }
     }
 };
 
