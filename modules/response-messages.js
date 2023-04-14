@@ -13,7 +13,11 @@ module.exports = {
     NO_QUOTES_BY_AUTHOR: 'There are no quotes stored by that author!',
     RANDOM_QUOTE_GENERIC_ERROR: 'There was a problem getting a random quote. Please try again later',
     EMPTY_QUERY: 'There were no quotes found matching your search.',
-    QUERY_TOO_GENERAL: 'Your search returned too many results! Use a narrower search.',
+    QUERY_TOO_GENERAL: 'Your search returned more than ' + require('./constants.js').MAX_SEARCH_RESULTS + ' results. Try narrowing your search.',
+    SEARCH_RESULT_TOO_LONG: 'Your search returned results, but returning them all would exceed Discord\'s 2000 character limit for messages.' +
+    ' You can either narrow your search, or you can always download saved quotes using the `/download` command.',
+    GENERIC_INTERACTION_ERROR: 'There was an error while executing this command! Feel free to contact the developer using' +
+        ' info found with the `/help` commmand.',
     HELP_MESSAGE: '**About:**\n\nThis is a bot for adding quotes and revisiting them later. Add a quote with `/add`.' +
         ' The author can be a mention of a user in the server (e.g. @Bob) or simply a name (Bob). The quotation can be ' +
         'entered as it is - there is no need to wrap it in quotation marks.\n\n' +
