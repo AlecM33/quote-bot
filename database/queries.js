@@ -49,6 +49,15 @@ module.exports = {
         });
     },
 
+    fetchUniqueAuthors: (guildId) => {
+        return query({
+            text: `SELECT DISTINCT author FROM quotes WHERE guild_id = $1;`,
+            values: [
+                guildId
+            ]
+        });
+    },
+
     getQuotesFromAuthor: (author, guildId) => {
         return query({
             text: `SELECT

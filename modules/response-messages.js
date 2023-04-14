@@ -8,7 +8,7 @@ module.exports = {
     GENERIC_ERROR: 'There was a problem saving your quote. Please try again later',
     GENERIC_RETRIEVAL_ERROR: 'There was a problem retrieving the specified quotes. Please contact the developer.',
     INCORRECT_AUTHOR_SYNTAX: "Invalid command. The author's name can only contain letters and spaces.",
-    QUOTE_COUNT_0: 'There are no quotes!',
+    QUOTE_COUNT_0: 'There are no quotes saved!',
     GENERIC_ERROR_COUNT_COMMAND: 'There was a problem getting the number of quotes. Please try again later.',
     NO_QUOTES_BY_AUTHOR: 'There are no quotes stored by that author!',
     RANDOM_QUOTE_GENERIC_ERROR: 'There was a problem getting a random quote. Please try again later',
