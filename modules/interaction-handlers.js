@@ -1,10 +1,11 @@
 const responseMessages = require('./response-messages.js');
 const queries = require('../database/queries.js');
 const { MessageAttachment } = require('discord.js');
-const STOP_WORDS = require('../modules/stop-words');
-const wordcloudConstructor = require('../modules/wordcloud-constructor');
+const STOP_WORDS = require('../modules/stop-words.js');
+const wordcloudConstructor = require('../modules/wordcloud-constructor.js');
 const { JSDOM } = require('jsdom');
 const canvas = require('canvas');
+const constants = require('./constants.js');
 
 module.exports = {
 
@@ -50,8 +51,16 @@ module.exports = {
     addHandler: async (interaction) => {
         const author = interaction.options.getString('author').trim();
         const quote = interaction.options.getString('quote').trim();
-        if (quote.includes('http://') || quote.includes('https://')) {
+        if (quote.length > constants.MAX_QUOTE_LENGTH) {
+            await interaction.reply({
+                content: 'Your quote of length ' + quote.length + ' exceeds the maximum allowed length of ' + constants.MAX_QUOTE_LENGTH,
+                ephemeral: true
+            });
+            return;
+        }
+        if (quote.toLowerCase().includes('http://') || quote.toLowerCase().includes('https://')) {
             await interaction.reply({ content: 'Quotes with links are disallowed.', ephemeral: true });
+            return;
         }
         const result = await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
             if (e.message.includes('duplicate key')) {
@@ -110,13 +119,14 @@ module.exports = {
         const searchString = interaction.options.getString('search_string')?.trim();
         const includeIdentifier = interaction.options.getBoolean('include_identifier');
         const searchResults = await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
+            console.error(e);
             await interaction.followUp({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
         });
 
         let reply = '';
         if (searchResults.length === 0) {
             reply += responseMessages.EMPTY_QUERY;
-        } else if (searchResults.length > 10) {
+        } else if (searchResults.length > constants.MAX_SEARCH_RESULTS) {
             reply += responseMessages.QUERY_TOO_GENERAL;
         } else {
             reply += 'Your search for "' + searchString + '" returned **' + searchResults.length + '** quotes: \n\n';
@@ -127,12 +137,17 @@ module.exports = {
         }
 
         if (!interaction.replied) {
-            await interaction.followUp(reply);
+            if (reply.length > constants.MAX_DISCORD_MESSAGE_LENGTH) {
+                await interaction.followUp(responseMessages.SEARCH_RESULT_TOO_LONG);
+            } else {
+                await interaction.followUp(reply);
+            }
         }
     },
 
     deleteHandler: async (interaction) => {
         const result = await queries.deleteQuoteById(interaction.options.getInteger('identifier'), interaction.guildId).catch(async (e) => {
+            console.error(e);
             await interaction.reply({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
         });
 
@@ -147,17 +162,11 @@ module.exports = {
 
     wordcloudHandler: async (interaction) => {
         await interaction.deferReply();
-        const SIZE_MAP = {
-            1: 'SIZE_SMALL',
-            2: 'SIZE_MEDIUM',
-            3: 'SIZE_LARGE'
-        };
-        const MAX_WORDS = 300;
         global.document = new JSDOM().window.document;
         const author = interaction.options.getString('author')?.trim();
         const quotesForCloud = author && author.length > 0
-            ? await queries.getQuotesFromAuthor(author,  interaction.guildId)
-            : await queries.fetchAllQuotes(interaction.guildId)
+            ? await queries.getQuotesFromAuthor(author, interaction.guildId)
+            : await queries.fetchAllQuotes(interaction.guildId);
         if (quotesForCloud.length === 0) {
             await interaction.followUp({
                 content: 'I didn\'t find any quotes to generate a wordcloud from!',
@@ -170,8 +179,8 @@ module.exports = {
         const initializationResult = constructor.initialize(
             wordsWithOccurrences
                 .sort((a, b) => a.frequency >= b.frequency ? -1 : 1)
-                .slice(0, MAX_WORDS),
-            SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM'
+                .slice(0, constants.MAX_WORDCLOUD_WORDS),
+            constants.WORDCLOUD_SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM'
         );
         initializationResult.cloud.on('end', () => {
             const d3 = constructor.draw(
@@ -182,8 +191,12 @@ module.exports = {
             const img = new canvas.Image();
             img.onload = async () => {
                 const myCanvas = canvas.createCanvas(
-                    initializationResult.config[SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM'],
-                    initializationResult.config[SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM']
+                    initializationResult.config[
+                        constants.WORDCLOUD_SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM'
+                    ],
+                    initializationResult.config[
+                        constants.WORDCLOUD_SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM'
+                    ]
                 );
                 const myContext = myCanvas.getContext('2d');
                 myContext.drawImage(img, 0, 0);
@@ -203,7 +216,7 @@ module.exports = {
 };
 
 function formatQuote (quote, includeDate = true, includeIdentifier = false, includeMarkdown = true) {
-    const quoteCharacters = ['"', '“', '”']
+    const quoteCharacters = ['"', '“', '”'];
     let quoteMessage = quote.quotation;
     const d = new Date(quote.said_at);
 
@@ -222,10 +235,10 @@ function formatQuote (quote, includeDate = true, includeIdentifier = false, incl
     quoteMessage = quoteMessage + ' - ' + quote.author;
 
     if (includeDate) {
-        quoteMessage += ' (added ' + d.toLocaleString('default',  {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
+        quoteMessage += ' (added ' + d.toLocaleString('default', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
         }) + ')';
     }
 
