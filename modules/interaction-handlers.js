@@ -66,7 +66,7 @@ module.exports = {
             if (e.message.includes('duplicate key')) {
                 await interaction.reply({ content: responseMessages.DUPLICATE_QUOTE, ephemeral: true });
             } else {
-                await interaction.reply(e.message);
+                await interaction.reply({ content: e.message, ephemeral: true });
             }
         });
 
@@ -138,7 +138,7 @@ module.exports = {
 
         if (!interaction.replied) {
             if (reply.length > constants.MAX_DISCORD_MESSAGE_LENGTH) {
-                await interaction.followUp(responseMessages.SEARCH_RESULT_TOO_LONG);
+                await interaction.followUp({ content: responseMessages.SEARCH_RESULT_TOO_LONG, ephemeral: true });
             } else {
                 await interaction.followUp(reply);
             }
