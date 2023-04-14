@@ -24,7 +24,7 @@ module.exports = {
         }
     },
 
-    downloadHandler: async (interaction) => {
+    downloadHandler: async (interaction, guildManager) => {
         await interaction.deferReply({ ephemeral: true });
         let content = '';
         try {
@@ -34,7 +34,15 @@ module.exports = {
                 return;
             }
             for (const quote of allQuotesFromServer) {
-                content += formatQuote(quote, true, false, false) + '\n';
+                content += await formatQuote(
+                    quote,
+                    true,
+                    false,
+                    false,
+                    true,
+                    guildManager,
+                    interaction
+                ) + '\n';
             }
             const buffer = Buffer.from(content);
             await interaction.followUp({
@@ -72,7 +80,7 @@ module.exports = {
         });
 
         if (!interaction.replied) {
-            await interaction.reply('Added the following:\n\n' + formatQuote(result[0], false, false));
+            await interaction.reply('Added the following:\n\n' + await formatQuote(result[0], false, false));
         }
     },
 
@@ -105,7 +113,7 @@ module.exports = {
                 : await queries.fetchAllQuotes(interaction.guildId);
             if (queryResult.length > 0) {
                 const randomQuote = queryResult[Math.floor(Math.random() * queryResult.length)];
-                await interaction.reply(formatQuote(randomQuote, true, false));
+                await interaction.reply(await formatQuote(randomQuote, true, false));
             } else {
                 await interaction.reply(responseMessages.NO_QUOTES_BY_AUTHOR);
             }
@@ -132,7 +140,7 @@ module.exports = {
         } else {
             reply += 'Your search for "' + searchString + '" returned **' + searchResults.length + '** quotes: \n\n';
             for (const result of searchResults) {
-                const quote = formatQuote(result, true, includeIdentifier);
+                const quote = await formatQuote(result, true, includeIdentifier);
                 reply += quote + '\n';
             }
         }
@@ -156,7 +164,7 @@ module.exports = {
             if (result.length === 0) {
                 await interaction.reply({ content: responseMessages.NOTHING_DELETED, ephemeral: true });
             } else {
-                await interaction.reply('The following quote was deleted: \n\n' + formatQuote(result[0], true, false));
+                await interaction.reply('The following quote was deleted: \n\n' + await formatQuote(result[0], true, false));
             }
         }
     },
@@ -217,17 +225,17 @@ module.exports = {
 
     authorsHandler: async (interaction) => {
         try {
-            const queryResult = await queries.fetchUniqueAuthors(interaction.guildId)
+            const queryResult = await queries.fetchUniqueAuthors(interaction.guildId);
             if (queryResult.length > 0) {
-                let reply = queryResult.map(row => row.author)
+                const reply = queryResult.map(row => row.author)
                     .sort((a, b) => a.localeCompare(b))
                     .reduce((accumulator, value, index) => {
                         if (index === 0) {
-                            return accumulator + value
+                            return accumulator + value;
                         } else {
-                            return accumulator + ', ' + value
+                            return accumulator + ', ' + value;
                         }
-                    },  '');
+                    }, '');
                 await interaction.reply('Here are all the different authors of this server\'s quotes: \n\n' + reply);
             } else {
                 await interaction.reply(responseMessages.QUOTE_COUNT_0);
@@ -239,7 +247,15 @@ module.exports = {
     }
 };
 
-function formatQuote (quote, includeDate = true, includeIdentifier = false, includeMarkdown = true) {
+async function formatQuote (
+    quote,
+    includeDate = true,
+    includeIdentifier = false,
+    includeMarkdown = true,
+    toFile = false,
+    guildManager = null,
+    interaction = null
+) {
     const quoteCharacters = ['"', '“', '”'];
     let quoteMessage = quote.quotation;
     const d = new Date(quote.said_at);
@@ -256,7 +272,11 @@ function formatQuote (quote, includeDate = true, includeIdentifier = false, incl
         quoteMessage = '_' + quoteMessage + '_';
     }
 
-    quoteMessage = quoteMessage + ' - ' + quote.author;
+    if (toFile && /^<@[0-9]+>$/.test(quote.author)) { // Discord @s are represented as <@UserID>
+        quoteMessage = quoteMessage + ' - ' + await attemptToResolveMentionToNickname(guildManager, interaction, quote.author);
+    } else {
+        quoteMessage = quoteMessage + ' - ' + quote.author;
+    }
 
     if (includeDate) {
         quoteMessage += ' (added ' + d.toLocaleString('default', {
@@ -271,6 +291,25 @@ function formatQuote (quote, includeDate = true, includeIdentifier = false, incl
     }
 
     return quoteMessage;
+}
+
+/* When quotes are written to a text file, we want to resolve a Users ID to their nickname in the server, if it still exists,
+    so that we don't end up writing a representation of the mention (e.g. <@123>) as the author. */
+async function attemptToResolveMentionToNickname (guildManager, interaction, author) {
+    try {
+        const guild = await guildManager.fetch(interaction.guildId);
+        if (guild && guild.members) {
+            const member = await guild.members.fetch(author.replace(/[^0-9]/g, ''));
+            if (member) {
+                return member.nickname
+                    ? '@' + member.nickname
+                    : '@' + member.user.username;
+            }
+        }
+        return 'User not found';
+    } catch (e) {
+        return 'User not found';
+    }
 }
 
 function mapQuotesToFrequencies (quotesForCloud) {

@@ -5,7 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('download')
         .setDescription('Receive a text file containing all your server\'s quotes.'),
-    async execute (interaction) {
-        await interactionHandlers.downloadHandler(interaction);
+    async execute (interaction, guildManager) {
+        await interactionHandlers.downloadHandler(interaction, guildManager);
     }
 };

@@ -9,7 +9,7 @@ module.exports = {
             option.setName('author')
                 .setDescription('The author by which to get a random quote.')
                 .setRequired(false)),
-    async execute (interaction) {
+    async execute (interaction, guildManager) {
         await interactionHandlers.randomHandler(interaction);
     }
 };

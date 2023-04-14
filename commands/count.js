@@ -9,7 +9,7 @@ module.exports = {
             option.setName('author')
                 .setDescription('the author by which to get the number of quotes')
                 .setRequired(false)),
-    async execute (interaction) {
+    async execute (interaction, guildManager) {
         await interactionHandlers.countHandler(interaction);
     }
 };
