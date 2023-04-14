@@ -53,7 +53,8 @@ module.exports = {
         const quote = interaction.options.getString('quote').trim();
         if (quote.length > constants.MAX_QUOTE_LENGTH) {
             await interaction.reply({
-                content: 'Your quote of length ' + quote.length + ' exceeds the maximum allowed length of ' + constants.MAX_QUOTE_LENGTH,
+                content: 'Your quote of length ' + quote.length + ' characters exceeds the maximum allowed length of ' +
+                    constants.MAX_QUOTE_LENGTH + ' characters.',
                 ephemeral: true
             });
             return;
