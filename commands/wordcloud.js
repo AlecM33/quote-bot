@@ -16,7 +16,7 @@ module.exports = {
             option.setName('author')
                 .setDescription('Generate a wordcloud from a specific author')
                 .setRequired(false)),
-    async execute (interaction) {
+    async execute (interaction, guildManager) {
         await interactionHandlers.wordcloudHandler(interaction);
     }
 };

@@ -9,7 +9,7 @@ module.exports = {
             option.setName('identifier')
                 .setDescription('the identifier of the quote, obtained via the /search command with "include_identifier" as True.')
                 .setRequired(true)),
-    async execute (interaction) {
+    async execute (interaction, guildManager) {
         await interactionHandlers.deleteHandler(interaction);
     }
 };

@@ -5,7 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('authors')
         .setDescription('Get a sorted list of unique authors of saved quotes.'),
-    async execute (interaction) {
+    async execute (interaction, guildManager) {
         await interactionHandlers.authorsHandler(interaction);
     }
 };

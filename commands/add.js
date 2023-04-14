@@ -13,7 +13,7 @@ module.exports = {
             option.setName('author')
                 .setDescription('The person(s) who said it')
                 .setRequired(true)),
-    async execute (interaction) {
+    async execute (interaction, guildManager) {
         await interactionHandlers.addHandler(interaction);
     }
 };
