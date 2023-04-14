@@ -116,7 +116,7 @@ module.exports = {
     },
 
     searchHandler: async (interaction) => {
-        await interaction.deferReply();
+        await interaction.deferReply({ ephemeral: true });
         const searchString = interaction.options.getString('search_string')?.trim();
         const includeIdentifier = interaction.options.getBoolean('include_identifier');
         const searchResults = await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
