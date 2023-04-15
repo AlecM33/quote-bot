@@ -12,7 +12,7 @@ A discord bot for saving and displaying memorable quotes from your friends.
 
 `/add` - add a quote by a specified author.<br>
 `/random` - display a random quote, optionally by author.<br>
-`/authors` - get a sorted list of unique authors of saved quotes.
+`/authors` - get a sorted list of unique authors of saved quotes.<br>
 `/search` - search for quotes by a string of text. You can also choose to include a quote's numerical identifier in the search results, which can be used to delete the quote.<br>
 `/delete` - delete a quote by its numerical identifier. The identifier is obtained using the "search" command and supplying the "include_identifier" parameter as "True".<br>
 `/download` - (response visible to only the sender) receive a text file containing all your server's quotes.<br>
