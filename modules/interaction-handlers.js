@@ -138,7 +138,6 @@ module.exports = {
         } else if (searchResults.length > constants.MAX_SEARCH_RESULTS) {
             reply += responseMessages.QUERY_TOO_GENERAL;
         } else {
-            reply += 'Your search for "' + searchString + '" returned **' + searchResults.length + '** quotes: \n\n';
             for (const result of searchResults) {
                 const quote = await formatQuote(result, true, includeIdentifier);
                 reply += quote + '\n';
@@ -149,7 +148,7 @@ module.exports = {
             if (reply.length > constants.MAX_DISCORD_MESSAGE_LENGTH) {
                 await interaction.followUp({ content: responseMessages.SEARCH_RESULT_TOO_LONG, ephemeral: true });
             } else {
-                await interaction.followUp(reply);
+                await interaction.followUp({ content: reply, ephemeral: false });
             }
         }
     },
