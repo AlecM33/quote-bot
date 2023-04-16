@@ -124,12 +124,12 @@ module.exports = {
     },
 
     searchHandler: async (interaction) => {
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply();
         const searchString = interaction.options.getString('search_string')?.trim();
         const includeIdentifier = interaction.options.getBoolean('include_identifier');
         const searchResults = await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
             console.error(e);
-            await interaction.followUp({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
+            await interaction.followUp({ content: responseMessages.GENERIC_ERROR });
         });
 
         let reply = '';
@@ -146,9 +146,9 @@ module.exports = {
 
         if (!interaction.replied) {
             if (reply.length > constants.MAX_DISCORD_MESSAGE_LENGTH) {
-                await interaction.followUp({ content: responseMessages.SEARCH_RESULT_TOO_LONG, ephemeral: true });
+                await interaction.followUp({ content: responseMessages.SEARCH_RESULT_TOO_LONG });
             } else {
-                await interaction.followUp({ content: reply, ephemeral: false });
+                await interaction.followUp({ content: reply });
             }
         }
     },
