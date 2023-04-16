@@ -10,6 +10,7 @@ const constants = require('./constants.js');
 module.exports = {
 
     helpHandler: async (interaction) => {
+        console.info('HELP command invoked');
         try {
             await interaction.reply({
                 content: responseMessages.HELP_MESSAGE,
@@ -25,6 +26,7 @@ module.exports = {
     },
 
     downloadHandler: async (interaction, guildManager) => {
+        console.info('DOWNLOAD command invoked');
         await interaction.deferReply({ ephemeral: true });
         let content = '';
         try {
@@ -57,6 +59,7 @@ module.exports = {
     },
 
     addHandler: async (interaction) => {
+        console.info('ADD command invoked');
         const author = interaction.options.getString('author').trim();
         const quote = interaction.options.getString('quote').trim();
         if (quote.length > constants.MAX_QUOTE_LENGTH) {
@@ -85,6 +88,7 @@ module.exports = {
     },
 
     countHandler: async (interaction) => {
+        console.info('COUNT command invoked');
         const author = interaction.options.getString('author')?.trim();
         try {
             const queryResult = author && author.length > 0
@@ -106,6 +110,7 @@ module.exports = {
     },
 
     randomHandler: async (interaction) => {
+        console.info('RANDOM command invoked');
         const author = interaction.options.getString('author')?.trim();
         try {
             const queryResult = author && author.length > 0
@@ -124,6 +129,7 @@ module.exports = {
     },
 
     searchHandler: async (interaction) => {
+        console.info('SEARCH command invoked');
         await interaction.deferReply();
         const searchString = interaction.options.getString('search_string')?.trim();
         const includeIdentifier = interaction.options.getBoolean('include_identifier');
@@ -154,6 +160,7 @@ module.exports = {
     },
 
     deleteHandler: async (interaction) => {
+        console.info('DELETE command invoked');
         const result = await queries.deleteQuoteById(interaction.options.getInteger('identifier'), interaction.guildId).catch(async (e) => {
             console.error(e);
             await interaction.reply({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
@@ -169,6 +176,7 @@ module.exports = {
     },
 
     wordcloudHandler: async (interaction) => {
+        console.info('WORDCLOUD command invoked');
         await interaction.deferReply();
         global.document = new JSDOM().window.document;
         const author = interaction.options.getString('author')?.trim();
@@ -223,6 +231,7 @@ module.exports = {
     },
 
     authorsHandler: async (interaction) => {
+        console.info('AUTHORS command invoked');
         try {
             const queryResult = await queries.fetchUniqueAuthors(interaction.guildId);
             if (queryResult.length > 0) {
