@@ -62,18 +62,7 @@ module.exports = {
         console.info('ADD command invoked');
         const author = interaction.options.getString('author').trim();
         const quote = interaction.options.getString('quote').trim();
-        if (quote.length > constants.MAX_QUOTE_LENGTH) {
-            await interaction.reply({
-                content: 'Your quote of length ' + quote.length + ' characters exceeds the maximum allowed length of ' +
-                    constants.MAX_QUOTE_LENGTH + ' characters.',
-                ephemeral: true
-            });
-            return;
-        }
-        if (quote.toLowerCase().includes('http://') || quote.toLowerCase().includes('https://')) {
-            await interaction.reply({ content: 'Quotes with links are disallowed.', ephemeral: true });
-            return;
-        }
+        validateAddCommand(quote, author, interaction);
         const result = await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
             if (e.message.includes('duplicate key')) {
                 await interaction.reply({ content: responseMessages.DUPLICATE_QUOTE, ephemeral: true });
@@ -318,6 +307,29 @@ async function attemptToResolveMentionToNickname (guildManager, interaction, aut
     } catch (e) {
         return 'User not found';
     }
+}
+
+function validateAddCommand(quote, author, interaction) {
+        if (quote.length > constants.MAX_QUOTE_LENGTH) {
+                await interaction.reply({
+                content: 'Your quote of length ' + quote.length + ' characters exceeds the maximum allowed length of ' +
+                    constants.MAX_QUOTE_LENGTH + ' characters.',
+                ephemeral: true
+            });
+            return;
+        }
+        if (author.length > constants.MAX_AUTHOR_LENGTH) {
+            await interaction.reply({
+                content: 'Your author of length ' + author.length + ' characters exceeds the maximum allowed length of ' 
+                + constants.MAX_AUTHOR_LENGTH + ' characters.',
+                ephemeral: true
+            });
+            return;
+        }
+        if (quote.toLowerCase().includes('http://') || quote.toLowerCase().includes('https://')) {
+            await interaction.reply({ content: 'Quotes with links are disallowed.', ephemeral: true });
+            return;
+        }
 }
 
 function mapQuotesToFrequencies (quotesForCloud) {
