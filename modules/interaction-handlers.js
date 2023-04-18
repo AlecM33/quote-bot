@@ -310,26 +310,25 @@ async function attemptToResolveMentionToNickname (guildManager, interaction, aut
 }
 
 async function validateAddCommand(quote, author, interaction) {
-        if (quote.length > constants.MAX_QUOTE_LENGTH) {
-                await interaction.reply({
-                content: 'Your quote of length ' + quote.length + ' characters exceeds the maximum allowed length of ' +
-                    constants.MAX_QUOTE_LENGTH + ' characters.',
-                ephemeral: true
-            });
-            return;
-        }
-        if (author.length > constants.MAX_AUTHOR_LENGTH) {
-            await interaction.reply({
-                content: 'Your author of length ' + author.length + ' characters exceeds the maximum allowed length of ' 
-                    + constants.MAX_AUTHOR_LENGTH + ' characters.',
-                ephemeral: true
-            });
-            return;
-        }
-        if (quote.toLowerCase().includes('http://') || quote.toLowerCase().includes('https://')) {
-            await interaction.reply({ content: 'Quotes with links are disallowed.', ephemeral: true });
-            return;
-        }
+    let reply = 'Your quote has the following problems:\n\n';
+    let hasProblem = false;
+    if (quote.length > constants.MAX_QUOTE_LENGTH) {
+        reply += '- Your quote of length ' + quote.length + ' characters exceeds the maximum allowed length of ' +
+                constants.MAX_QUOTE_LENGTH + ' characters.\n';
+        hasProblem = true;
+    }
+    if (author.length > constants.MAX_AUTHOR_LENGTH) {
+       reply += '- Your author of length ' + author.length + ' characters exceeds the maximum allowed length of ' 
+                + constants.MAX_AUTHOR_LENGTH + ' characters.\n';
+       hasProblem = true;
+    }
+    if (quote.toLowerCase().includes('http://') || quote.toLowerCase().includes('https://')) {
+        reply += '- Quotes with links are disallowed.';
+        hasProblem = true;
+    }
+    if (hasProblem) {
+        await interaction.reply({ content: reply, ephemeral: true });
+    }
 }
 
 function mapQuotesToFrequencies (quotesForCloud) {
