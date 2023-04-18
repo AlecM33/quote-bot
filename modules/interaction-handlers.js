@@ -75,7 +75,6 @@ module.exports = {
                 await interaction.reply('Added the following:\n\n' + await formatQuote(result[0], false, false));
             }
         }
-
     },
 
     countHandler: async (interaction) => {
@@ -286,7 +285,7 @@ async function formatQuote (
     }
 
     if (includeIdentifier) {
-        quoteMessage += ' (**identifier**: _' + quote.id + '_)';
+        quoteMessage += ' (**identifier**: ' + quote.id + ')';
     }
 
     return quoteMessage;
@@ -311,7 +310,7 @@ async function attemptToResolveMentionToNickname (guildManager, interaction, aut
     }
 }
 
-async function validateAddCommand(quote, author, interaction) {
+async function validateAddCommand (quote, author, interaction) {
     let reply = 'Your quote has the following problems:\n\n';
     let hasProblem = false;
     if (quote.length > constants.MAX_QUOTE_LENGTH) {
@@ -320,9 +319,9 @@ async function validateAddCommand(quote, author, interaction) {
         hasProblem = true;
     }
     if (author.length > constants.MAX_AUTHOR_LENGTH) {
-       reply += '- Your author of length ' + author.length + ' characters exceeds the maximum allowed length of '
-                + constants.MAX_AUTHOR_LENGTH + ' characters.\n';
-       hasProblem = true;
+        reply += '- Your author of length ' + author.length + ' characters exceeds the maximum allowed length of ' +
+                constants.MAX_AUTHOR_LENGTH + ' characters.\n';
+        hasProblem = true;
     }
     if (quote.toLowerCase().includes('http://') || quote.toLowerCase().includes('https://')) {
         reply += '- Quotes with links are disallowed.';

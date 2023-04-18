@@ -10,7 +10,7 @@ CREATE COLLATION ci (
 CREATE TABLE quotes(
     id SERIAL,
     quotation citext NOT NULL,
-    author character varying(64) COLLATE ci NOT NULL,
+    author character varying(120) COLLATE ci NOT NULL,
     said_at date NOT NULL,
     guild_id character varying(64) NOT NULL,
     hash text NOT NULL PRIMARY KEY
