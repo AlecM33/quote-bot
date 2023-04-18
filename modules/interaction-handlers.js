@@ -62,18 +62,20 @@ module.exports = {
         console.info('ADD command invoked');
         const author = interaction.options.getString('author').trim();
         const quote = interaction.options.getString('quote').trim();
-        validateAddCommand(quote, author, interaction);
-        const result = await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
-            if (e.message.includes('duplicate key')) {
-                await interaction.reply({ content: responseMessages.DUPLICATE_QUOTE, ephemeral: true });
-            } else {
-                await interaction.reply({ content: e.message, ephemeral: true });
-            }
-        });
-
+        await validateAddCommand(quote, author, interaction);
         if (!interaction.replied) {
-            await interaction.reply('Added the following:\n\n' + await formatQuote(result[0], false, false));
+            const result = await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
+                if (e.message.includes('duplicate key')) {
+                    await interaction.reply({ content: responseMessages.DUPLICATE_QUOTE, ephemeral: true });
+                } else {
+                    await interaction.reply({ content: e.message, ephemeral: true });
+                }
+            });
+            if (!interaction.replied) {
+                await interaction.reply('Added the following:\n\n' + await formatQuote(result[0], false, false));
+            }
         }
+
     },
 
     countHandler: async (interaction) => {
@@ -318,7 +320,7 @@ async function validateAddCommand(quote, author, interaction) {
         hasProblem = true;
     }
     if (author.length > constants.MAX_AUTHOR_LENGTH) {
-       reply += '- Your author of length ' + author.length + ' characters exceeds the maximum allowed length of ' 
+       reply += '- Your author of length ' + author.length + ' characters exceeds the maximum allowed length of '
                 + constants.MAX_AUTHOR_LENGTH + ' characters.\n';
        hasProblem = true;
     }
