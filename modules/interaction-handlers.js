@@ -168,7 +168,7 @@ module.exports = {
     wordcloudHandler: async (interaction) => {
         console.info('WORDCLOUD command invoked');
         await interaction.deferReply();
-        global.document = new JSDOM().window.document;
+        global.document = new JSDOM().window.document; // d3-cloud requires that document be defined in the global scope.
         const author = interaction.options.getString('author')?.trim();
         const quotesForCloud = author && author.length > 0
             ? await queries.getQuotesFromAuthor(author, interaction.guildId)
@@ -192,7 +192,7 @@ module.exports = {
             const d3 = constructor.draw(
                 initializationResult.cloud,
                 initializationResult.words,
-                document.body
+                global.document.body
             );
             const img = new canvas.Image();
             img.onload = async () => {
@@ -212,6 +212,7 @@ module.exports = {
                         ? 'Here\'s a wordcloud for quotes said by "' + author + '"!'
                         : 'Here\'s a wordcloud I generated from this server\'s quotes!'
                 });
+                global.document = null;
             };
             img.onerror = err => { throw err; };
             img.src = 'data:image/svg+xml;base64,' + btoa(
