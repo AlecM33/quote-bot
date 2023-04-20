@@ -214,7 +214,10 @@ module.exports = {
                 });
                 global.document = null;
             };
-            img.onerror = err => { throw err; };
+            img.onerror = err => {
+                console.error(err);
+                global.document = null;
+            };
             img.src = 'data:image/svg+xml;base64,' + btoa(
                 decodeURIComponent(encodeURIComponent(d3.select(global.document.body).node().innerHTML)));
         });
@@ -232,10 +235,10 @@ module.exports = {
                         if (index === 0) {
                             return accumulator + value;
                         } else {
-                            return accumulator + ', ' + value;
+                            return accumulator + ' • ' + value;
                         }
                     }, '');
-                await interaction.reply('Here are all the different authors of this server\'s quotes: \n\n' + reply);
+                await interaction.reply('Here are all the different authors, separated by bullet points: \n\n' + reply);
             } else {
                 await interaction.reply(responseMessages.QUOTE_COUNT_0);
             }
