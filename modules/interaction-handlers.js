@@ -274,7 +274,7 @@ async function formatQuote (
         quoteMessage = '_' + quoteMessage + '_';
     }
 
-    if (toFile && /^<@[0-9]+>$/.test(quote.author)) { // Discord @s are represented as <@UserID>
+    if (toFile && /^<@[&#!0-9]+>$/.test(quote.author)) { // Discord @s are represented as <@UserID>
         quoteMessage = quoteMessage + ' - ' + await attemptToResolveMentionToNickname(guildManager, interaction, quote.author);
     } else {
         quoteMessage = quoteMessage + ' - ' + quote.author;
