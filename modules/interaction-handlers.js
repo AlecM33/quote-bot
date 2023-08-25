@@ -10,7 +10,7 @@ const constants = require('./constants.js');
 module.exports = {
 
     helpHandler: async (interaction) => {
-        console.info('HELP command invoked');
+        console.info(`HELP command invoked by guild: ${interaction.guildId}`);
         try {
             await interaction.reply({
                 content: responseMessages.HELP_MESSAGE,
@@ -26,7 +26,7 @@ module.exports = {
     },
 
     downloadHandler: async (interaction, guildManager) => {
-        console.info('DOWNLOAD command invoked');
+        console.info(`DOWNLOAD command invoked by guild: ${interaction.guildId}`);
         await interaction.deferReply({ ephemeral: true });
         let content = '';
         try {
@@ -59,10 +59,11 @@ module.exports = {
     },
 
     addHandler: async (interaction) => {
-        console.info('ADD command invoked');
+        console.info(`ADD command invoked by guild: ${interaction.guildId}`);
         const author = interaction.options.getString('author').trim();
         const quote = interaction.options.getString('quote').trim();
         await validateAddCommand(quote, author, interaction);
+        console.info(`SAID BY: ${author}`);
         if (!interaction.replied) {
             const result = await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
                 if (e.message.includes('duplicate key')) {
@@ -78,7 +79,7 @@ module.exports = {
     },
 
     countHandler: async (interaction) => {
-        console.info('COUNT command invoked');
+        console.info(`COUNT command invoked by guild: ${interaction.guildId}`);
         const author = interaction.options.getString('author')?.trim();
         try {
             const queryResult = author && author.length > 0
@@ -100,7 +101,7 @@ module.exports = {
     },
 
     randomHandler: async (interaction) => {
-        console.info('RANDOM command invoked');
+        console.info(`RANDOM command invoked by guild: ${interaction.guildId}`);
         const author = interaction.options.getString('author')?.trim();
         try {
             const queryResult = author && author.length > 0
@@ -119,7 +120,7 @@ module.exports = {
     },
 
     searchHandler: async (interaction) => {
-        console.info('SEARCH command invoked');
+        console.info(`SEARCH command invoked by guild: ${interaction.guildId}`);
         await interaction.deferReply();
         const searchString = interaction.options.getString('search_string')?.trim();
         const includeIdentifier = interaction.options.getBoolean('include_identifier');
@@ -150,7 +151,7 @@ module.exports = {
     },
 
     deleteHandler: async (interaction) => {
-        console.info('DELETE command invoked');
+        console.info(`DELETE command invoked by guild: ${interaction.guildId}`);
         const result = await queries.deleteQuoteById(interaction.options.getInteger('identifier'), interaction.guildId).catch(async (e) => {
             console.error(e);
             await interaction.reply({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
@@ -166,7 +167,7 @@ module.exports = {
     },
 
     wordcloudHandler: async (interaction) => {
-        console.info('WORDCLOUD command invoked');
+        console.info(`WORDCLOUD command invoked by guild: ${interaction.guildId}`);
         await interaction.deferReply();
         global.document = new JSDOM().window.document; // d3-cloud requires that document be defined in the global scope.
         const author = interaction.options.getString('author')?.trim();
@@ -225,7 +226,7 @@ module.exports = {
     },
 
     authorsHandler: async (interaction) => {
-        console.info('AUTHORS command invoked');
+        console.info(`AUTHORS command invoked by guild: ${interaction.guildId}`);
         try {
             const queryResult = await queries.fetchUniqueAuthors(interaction.guildId);
             if (queryResult.length > 0) {
