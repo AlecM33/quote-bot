@@ -1,12 +1,13 @@
 const interactionHandlers = require('../modules/interaction-handlers.js');
 const queries = require('../database/queries.js');
 const responseMessages = require('../modules/response-messages.js');
+const utilities = require('../modules/utilities.js');
 
 describe('interaction handlers', () => {
     describe('#addHandler', () => {
         let interaction;
 
-        beforeAll(() => {
+        beforeEach(() => {
             interaction = {
                 options: {
                     getString: (string) => {
@@ -40,6 +41,8 @@ describe('interaction handlers', () => {
                 };
             });
 
+            spyOn(utilities, 'validateAddCommand');
+
             await interactionHandlers.addHandler(interaction);
 
             expect(queries.addQuote).toHaveBeenCalledWith('quote', 'author', '123');
@@ -51,6 +54,7 @@ describe('interaction handlers', () => {
                 interaction.replied = true;
                 throw new Error('could not connect to database');
             });
+            spyOn(utilities, 'validateAddCommand');
             try {
                 await interactionHandlers.addHandler(interaction);
             } catch (e) {
@@ -64,6 +68,7 @@ describe('interaction handlers', () => {
                 interaction.replied = true;
                 throw new Error('could not connect to database');
             });
+            spyOn(utilities, 'validateAddCommand');
             try {
                 await interactionHandlers.addHandler(interaction);
             } catch (e) {
