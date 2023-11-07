@@ -1,5 +1,4 @@
 # quote-bot
-<br><br>
 A discord bot for saving and displaying memorable quotes from your friends. Currently storing hundreds of quotes
 from dozens of servers!
 <br>
