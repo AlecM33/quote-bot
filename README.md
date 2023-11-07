@@ -1,11 +1,7 @@
 # quote-bot
-
-<span>
-    <img src='./servers-badge.svg'/>
-    <img src='./quotes-stored-badge.svg'/>
-</span>
 <br><br>
-A discord bot for saving and displaying memorable quotes from your friends.
+A discord bot for saving and displaying memorable quotes from your friends. Currently storing hundreds of quotes
+from dozens of servers!
 <br>
 
 ### Add this bot to your server via top.gg: https://top.gg/bot/777314683333771285, or read below for how to set up your own instance. 
