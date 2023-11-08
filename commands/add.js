@@ -12,7 +12,11 @@ module.exports = {
         .addStringOption(option =>
             option.setName('author')
                 .setDescription('The person(s) who said it')
-                .setRequired(true)),
+                .setRequired(true))
+        .addStringOption(option =>
+            option.setName('date')
+                .setDescription('The date the quote was said (MM/DD/YYYY or MM-DD-YYYY). Defaults to today.')
+                .setRequired(false)),
     async execute (interaction, guildManager) {
         await interactionHandlers.addHandler(interaction);
     }

@@ -25,6 +25,22 @@ module.exports = {
         }
     },
 
+    updatesHandler: async (interaction) => {
+        console.info(`UPDATES command invoked by guild: ${interaction.guildId}`);
+        try {
+            await interaction.reply({
+                content: responseMessages.UPDATES_MESSAGE,
+                ephemeral: true
+            });
+        } catch (e) {
+            console.error(e);
+            await interaction.reply({
+                content: responseMessages.GENERIC_ERROR,
+                ephemeral: true
+            });
+        }
+    },
+
     downloadHandler: async (interaction, guildManager) => {
         console.info(`DOWNLOAD command invoked by guild: ${interaction.guildId}`);
         await interaction.deferReply({ ephemeral: true });
@@ -62,18 +78,19 @@ module.exports = {
         console.info(`ADD command invoked by guild: ${interaction.guildId}`);
         const author = interaction.options.getString('author').trim();
         const quote = interaction.options.getString('quote').trim();
-        await validateAddCommand(quote, author, interaction);
+        const date = interaction.options.getString('date')?.trim();
+        await validateAddCommand(quote, author, date, interaction);
         console.info(`SAID BY: ${author}`);
         if (!interaction.replied) {
-            const result = await queries.addQuote(quote, author, interaction.guildId).catch(async (e) => {
+            const result = await queries.addQuote(quote, author, interaction.guildId, date).catch(async (e) => {
                 if (e.message.includes('duplicate key')) {
                     await interaction.reply({ content: responseMessages.DUPLICATE_QUOTE, ephemeral: true });
                 } else {
-                    await interaction.reply({ content: e.message, ephemeral: true });
+                    await interaction.reply({ content: 'Error adding your quote: ' + e.message, ephemeral: true });
                 }
             });
             if (!interaction.replied) {
-                await interaction.reply('Added the following:\n\n' + await formatQuote(result[0], false, false));
+                await interaction.reply('Added the following:\n\n' + await formatQuote(result[0], date !== undefined, false));
             }
         }
     },

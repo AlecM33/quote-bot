@@ -18,16 +18,16 @@ module.exports = {
     ' You can either narrow your search, or you can always download saved quotes using the `/download` command.',
     GENERIC_INTERACTION_ERROR: 'There was an error while executing this command! Feel free to contact the developer using' +
         ' info found with the `/help` commmand.',
-    HELP_MESSAGE: '**About:**\n\nThis is a bot for adding quotes and revisiting them later. Add a quote with `/add`.' +
-        ' The author can be a mention of a user in the server (e.g. @Bob) or simply a name (Bob). The quotation can be ' +
+    HELP_MESSAGE: '\n\n**About:**\n\nThis is a bot for adding quotes and revisiting them later. To get the latest info on ' +
+        'changes to the bot, use the `/updates` command.\n\n' +
+        'Add a quote with `/add`. The author can be a mention of a user in the server (e.g. @Bob) or simply a name (Bob). The quotation can be ' +
         'entered as it is - there is no need to wrap it in quotation marks.\n\n' +
-        'Find quotes with `/search`. You can enter a word or phrase, and the bot will give you the quotes that match. ' +
-        'This is not case-sensitive. There is an option called `include_identifier` which, if sent as true, will return a numerical' +
-        ' ID for each quote. This is used with the `/delete` command to remove a quote from those saved.\n\n' +
+        'Find quotes with `/search`. You can enter a word or phrase, and the bot will give you the quotes that match.\n\n' +
         'Pull random quotes with `/random`.\n\n' +
         'You can receive all the quotes you have saved at any time using `/download`.\n\n' +
-        'To delete a quote, you must first search for it with the `include_identifier` ' +
-        'option as `true`. This will return an integer ID for the quote. Then, provide that ID to the `/delete` command.\n\n' +
+        'To `/delete` a quote, you must first use the `/search` command with the `include_identifier` ' +
+        'option as `true`. This will return an integer ID for the quote. Then, provide that ID to the delete command' +
+        ' (I am open to suggestions on how to make the deletion process easier).\n\n' +
         'You can also generate a "wordcloud" visualization of quotes said in your server using `/wordcloud`.\n\n' +
         '**Privacy Policy:**\n\n' +
         'Quotes added in a particular server can only be retrieved by users in that server. ' +
@@ -36,6 +36,10 @@ module.exports = {
         ' used for this bot and its associated commands. Obviously, the quotes you add are a reflection of you and your server.' +
         ' For safety, the bot will not accept quotes that produce hyperlinks, but other than that, it does not attempt ' +
         'to moderate quote content. Quote content moderation is thus only about as good as your server\'s moderation.\n\n' +
-        '**Support:**\n\nFor questions or concerns, you can e-mail the creator at leohfx@gmail.com\n\n' +
-        'This bot is open source! Find it at: https://github.com/AlecM33/quote-bot'
+        '**Support:**\n\nFor questions or concerns, you can e-mail the creator at leohfx@gmail.com. Thanks so much for using my bot! :) ' +
+        'I hope it serves as a nice tool to preserve good memories.\n\n' +
+        'This bot is open source! Find it at: https://github.com/AlecM33/quote-bot',
+    UPDATES_MESSAGE: '**Latest Updates**\n\n**v1.0.1** (7 November 2023)\n- There is now an optional "date" parameter for' +
+        ' the `/add` command. If a quote was said a while ago, and you want to capture that when saving it with this bot,' +
+        ' provide a date. The bot will say it was added on that day. Otherwise, it will use today\'s date.'
 };
