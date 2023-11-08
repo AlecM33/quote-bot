@@ -14,6 +14,7 @@ from dozens of servers!
 `/wordcloud` - Generate a colorful cloud of words from the quotes said in your server! The size of a word is proportional to how often it's been said.<br>
 `/count` - get the number of quotes saved, optionally by author.<br>
 `/help` - (response visible to only the sender) info on the bot and how to use it, the privacy policy, and support resources.
+`/updates` - (response visible to only the sender) latest info on changes to the bot.
 
 ![image](https://user-images.githubusercontent.com/24642328/179651423-3e55ca4c-92ec-4564-929e-0b154670aa83.png)
 
