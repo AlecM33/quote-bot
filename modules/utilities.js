@@ -34,7 +34,7 @@ module.exports = {
         }
 
         if (includeDate) {
-            quoteMessage += ' (added ' + d.toLocaleString('default', {
+            quoteMessage += ' (' + d.toLocaleString('default', {
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric'
@@ -48,7 +48,7 @@ module.exports = {
         return quoteMessage;
     },
 
-    validateAddCommand: async (quote, author, interaction) => {
+    validateAddCommand: async (quote, author, date, interaction) => {
         let reply = 'Your quote has the following problems:\n\n';
         let hasProblem = false;
         if (quote.length > constants.MAX_QUOTE_LENGTH) {
@@ -63,6 +63,10 @@ module.exports = {
         }
         if (quote.toLowerCase().includes('http://') || quote.toLowerCase().includes('https://')) {
             reply += '- Quotes with links are disallowed.';
+            hasProblem = true;
+        }
+        if (date && !date.match(/^\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}$/)) {
+            reply += 'Your provided date has incorrect formatting. Use MM/DD/YYYY or MM-DD-YYYY (e.g. 08/15/2021 or 8-15-21)'
             hasProblem = true;
         }
         if (hasProblem) {
