@@ -21,7 +21,7 @@ module.exports = {
     HELP_MESSAGE: '\n\n**About:**\n\nThis is a bot for adding quotes and revisiting them later. To get the latest info on ' +
         'changes to the bot, use the `/updates` command.\n\n' +
         'Add a quote with `/add`. The author can be a mention of a user in the server (e.g. @Bob) or simply a name (Bob). The quotation can be ' +
-        'entered as it is - there is no need to wrap it in quotation marks.\n\n' +
+        'entered as it is - there is no need to wrap it in quotation marks. If the quote was said before today, you can optionally provide a "date" parameter (MM/DD/YYYY or MM-DD-YYYY)\n\n' +
         'Find quotes with `/search`. You can enter a word or phrase, and the bot will give you the quotes that match.\n\n' +
         'Pull random quotes with `/random`.\n\n' +
         'You can receive all the quotes you have saved at any time using `/download`.\n\n' +
