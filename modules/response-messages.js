@@ -39,7 +39,7 @@ module.exports = {
         '**Support:**\n\nFor questions or concerns, you can e-mail the creator at leohfx@gmail.com. Thanks so much for using my bot! :) ' +
         'I hope it serves as a nice tool to preserve good memories.\n\n' +
         'This bot is open source! Find it at: https://github.com/AlecM33/quote-bot',
-    UPDATES_MESSAGE: '**Latest Updates**\n\n**v1.0.1** (7 November 2023)\n- There is now an optional "date" parameter for' +
+    UPDATES_MESSAGE: '**Latest Updates**\n\n**1000 quotes!** (28 December 2023)\n- This bot is now storing over 1000 quotes from several dozen servers. Cheers to the new year and happy quoting!\n\n**v1.0.1** (7 November 2023)\n- There is now an optional "date" parameter for' +
         ' the `/add` command. If a quote was said a while ago, and you want to capture that when saving it with this bot,' +
         ' provide a date. The bot will say it was added on that day. Otherwise, it will use today\'s date.'
 };
