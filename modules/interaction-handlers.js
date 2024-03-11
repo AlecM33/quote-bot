@@ -5,7 +5,7 @@ const wordcloudConstructor = require('../modules/wordcloud-constructor.js');
 const { JSDOM } = require('jsdom');
 const canvas = require('canvas');
 const constants = require('./constants.js');
-const { validateAddCommand, formatQuote, mapQuotesToFrequencies } = require('./utilities.js');
+const utilities = require('./utilities.js');
 
 module.exports = {
 
@@ -52,7 +52,7 @@ module.exports = {
                 return;
             }
             for (const quote of allQuotesFromServer) {
-                content += await formatQuote(
+                content += await utilities.formatQuote(
                     quote,
                     true,
                     false,
@@ -79,7 +79,7 @@ module.exports = {
         const author = interaction.options.getString('author').trim();
         const quote = interaction.options.getString('quote').trim();
         const date = interaction.options.getString('date')?.trim();
-        await validateAddCommand(quote, author, date, interaction);
+        await utilities.validateAddCommand(quote, author, date, interaction);
         console.info(`SAID BY: ${author}`);
         if (!interaction.replied) {
             const result = await queries.addQuote(quote, author, interaction.guildId, date).catch(async (e) => {
@@ -90,7 +90,7 @@ module.exports = {
                 }
             });
             if (!interaction.replied) {
-                await interaction.reply('Added the following:\n\n' + await formatQuote(result[0], date !== undefined, false));
+                await interaction.reply('Added the following:\n\n' + await utilities.formatQuote(result[0], date !== undefined, false));
             }
         }
     },
@@ -126,7 +126,7 @@ module.exports = {
                 : await queries.fetchAllQuotes(interaction.guildId);
             if (queryResult.length > 0) {
                 const randomQuote = queryResult[Math.floor(Math.random() * queryResult.length)];
-                await interaction.reply(await formatQuote(randomQuote, true, false));
+                await interaction.reply(await utilities.formatQuote(randomQuote, true, false));
             } else {
                 await interaction.reply(responseMessages.NO_QUOTES_BY_AUTHOR);
             }
@@ -153,7 +153,7 @@ module.exports = {
             reply += responseMessages.QUERY_TOO_GENERAL;
         } else {
             for (const result of searchResults) {
-                const quote = await formatQuote(result, true, includeIdentifier);
+                const quote = await utilities.formatQuote(result, true, includeIdentifier);
                 reply += quote + '\n';
             }
         }
@@ -178,7 +178,7 @@ module.exports = {
             if (result.length === 0) {
                 await interaction.reply({ content: responseMessages.NOTHING_DELETED, ephemeral: true });
             } else {
-                await interaction.reply('The following quote was deleted: \n\n' + await formatQuote(result[0], true, false));
+                await interaction.reply('The following quote was deleted: \n\n' + await utilities.formatQuote(result[0], true, false));
             }
         }
     },
@@ -198,7 +198,7 @@ module.exports = {
             });
             return;
         }
-        const wordsWithOccurrences = mapQuotesToFrequencies(quotesForCloud);
+        const wordsWithOccurrences = utilities.mapQuotesToFrequencies(quotesForCloud);
         const constructor = await wordcloudConstructor;
         const initializationResult = constructor.initialize(
             wordsWithOccurrences
@@ -242,27 +242,53 @@ module.exports = {
         initializationResult.cloud.start();
     },
 
-    authorsHandler: async (interaction) => {
+    authorsHandler: async (interaction, guildManager) => {
         console.info(`AUTHORS command invoked by guild: ${interaction.guildId}`);
+        await interaction.deferReply();
         try {
+            let reply;
             const queryResult = await queries.fetchUniqueAuthors(interaction.guildId);
             if (queryResult.length > 0) {
-                const reply = queryResult.map(row => row.author)
-                    .sort((a, b) => a.localeCompare(b))
-                    .reduce((accumulator, value, index) => {
-                        if (index === 0) {
-                            return accumulator + value;
-                        } else {
-                            return accumulator + ' • ' + value;
-                        }
-                    }, '');
-                await interaction.reply('Here are all the different authors, separated by bullet points: \n\n' + reply);
+                let cumulativeAuthorMessageLength = constants.AUTHOR_SEPARATOR.length * queryResult.length;
+                const authors = queryResult.map(row => {
+                    cumulativeAuthorMessageLength += row.author.length;
+                    return row.author;
+                });
+                // If the message listing the authors would be too long, we will attach them as a file instead.
+                if (cumulativeAuthorMessageLength > constants.MAX_DISCORD_MESSAGE_LENGTH) {
+                    reply = await authors
+                        .reduce(async (accumulator, value, index) => {
+                            if (value.match(constants.MENTION_REGEX)) {
+                                value = await utilities.formatAuthor(guildManager, interaction, value);
+                            }
+                            if (index === 0) {
+                                return await accumulator + value;
+                            } else {
+                                return await accumulator + '\n' + value;
+                            }
+                        }, '');
+                    const buffer = Buffer.from(reply);
+                    await interaction.followUp({
+                        files: [new MessageAttachment(buffer, 'authors.txt')],
+                        content: 'Here are all the different authors. There are a lot of them, so I put them in the attached text file.'
+                    });
+                } else {
+                    reply = await authors
+                        .reduce(async (accumulator, value, index) => {
+                            if (index === 0) {
+                                return await accumulator + value;
+                            } else {
+                                return await accumulator + constants.AUTHOR_SEPARATOR + value;
+                            }
+                        }, '');
+                    await interaction.followUp('Here are all the different authors, separated by bullet points: \n\n' + reply);
+                }
             } else {
-                await interaction.reply(responseMessages.QUOTE_COUNT_0);
+                await interaction.followUp(responseMessages.QUOTE_COUNT_0);
             }
         } catch (e) {
             console.error(e);
-            await interaction.reply({ content: responseMessages.GENERIC_INTERACTION_ERROR, ephemeral: true });
+            await interaction.followUp({ content: responseMessages.GENERIC_INTERACTION_ERROR, ephemeral: true });
         }
     }
 };

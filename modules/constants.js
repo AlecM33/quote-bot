@@ -8,5 +8,7 @@ module.exports = {
     },
     MAX_WORDCLOUD_WORDS: 300,
     MAX_DISCORD_MESSAGE_LENGTH: 2000,
-    MAX_AUTHOR_LENGTH: 120
+    MAX_AUTHOR_LENGTH: 240,
+    MENTION_REGEX: /<@[&!0-9]+>|<#[0-9]+>/g,
+    AUTHOR_SEPARATOR: ' • '
 };

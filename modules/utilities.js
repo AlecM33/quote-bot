@@ -27,8 +27,8 @@ module.exports = {
             quoteMessage = '_' + quoteMessage + '_';
         }
 
-        if (toFile && /^<@[&!0-9]+>|<#[0-9]+>$/.test(quote.author)) { // Discord @s are represented as <@UserID>
-            quoteMessage = quoteMessage + ' - ' + await attemptToResolveMentionToName(guildManager, interaction, quote.author);
+        if (toFile && quote.author.match(constants.MENTION_REGEX)) { // Discord @s are represented as <@UserID>
+            quoteMessage = quoteMessage + ' - ' + await attemptToResolveMentionsToName(guildManager, interaction, quote.author);
         } else {
             quoteMessage = quoteMessage + ' - ' + quote.author;
         }
@@ -48,6 +48,10 @@ module.exports = {
         return quoteMessage;
     },
 
+    formatAuthor: async (guildManager, interaction, author) => {
+        return await attemptToResolveMentionsToName(guildManager, interaction, author);
+    },
+
     validateAddCommand: async (quote, author, date, interaction) => {
         let reply = 'Your quote has the following problems:\n\n';
         let hasProblem = false;
@@ -65,8 +69,8 @@ module.exports = {
             reply += '- Quotes with links are disallowed.';
             hasProblem = true;
         }
-        if (date && !date.match(/^\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}$/)) {
-            reply += 'Your provided date has incorrect formatting. Use MM/DD/YYYY or MM-DD-YYYY (e.g. 08/15/2021 or 8-15-21)'
+        if (date && !date.match(/^\d{1,2}[-/]\d{1,2}[-/]\d{2,4}$/)) {
+            reply += 'Your provided date has incorrect formatting. Use MM/DD/YYYY or MM-DD-YYYY (e.g. 08/15/2021 or 8-15-21)';
             hasProblem = true;
         }
         if (hasProblem) {
@@ -99,30 +103,46 @@ module.exports = {
 
 /* When quotes are written to a text file, we want to resolve an ID to a name in the server, if it still exists,
        so that we don't end up writing a representation of the mention (e.g. <@123>) as the author. */
-async function attemptToResolveMentionToName (guildManager, interaction, author) {
+async function attemptToResolveMentionsToName (guildManager, interaction, author) {
     try {
         const guild = await guildManager.fetch(interaction.guildId);
         if (guild) {
-            const entity = await getEntity(guild, author);
-            if (entity) {
-                return entity.nickname
-                    ? '@' + entity.nickname
-                    : (() => {
-                        if (entity.user) {
-                            return '@' + entity.user.username;
-                        } else if (entity.constructor.name === 'Role') {
-                            return '@' + entity.name;
-                        } else {
-                            return '#' + entity.name; // a channel
-                        }
-                    })();
+            const mentions = author.match(constants.MENTION_REGEX);
+            for (const mention of mentions) {
+                let entity;
+                try {
+                    entity = await getEntity(guild, mention);
+                } catch (e) {
+                    author = author.replaceAll(mention, 'Unknown User');
+                    continue;
+                }
+                if (entity) {
+                    const resolved = resolveEntity(entity);
+                    author = author.replaceAll(mention, resolved);
+                } else {
+                    author = author.replaceAll(mention, 'Unknown User');
+                }
             }
         }
-        return 'User not found';
+        return author;
     } catch (e) {
         console.error(e);
-        return 'User not found';
+        return 'Unknown User(s)';
     }
+}
+
+function resolveEntity (entity) {
+    return entity.nickname
+        ? '@' + entity.nickname
+        : (() => {
+            if (entity.user) {
+                return '@' + entity.user.username;
+            } else if (entity.constructor.name === 'Role') {
+                return '@' + entity.name;
+            } else {
+                return '#' + entity.name; // a channel
+            }
+        })();
 }
 
 async function getEntity (guild, author) {
