@@ -1,6 +1,6 @@
 const responseMessages = require('./response-messages.js');
 const queries = require('../database/queries.js');
-const { MessageAttachment } = require('discord.js');
+const { AttachmentBuilder } = require('discord.js');
 const wordcloudConstructor = require('../modules/wordcloud-constructor.js');
 const { JSDOM } = require('jsdom');
 const canvas = require('canvas');
@@ -64,13 +64,13 @@ module.exports = {
             }
             const buffer = Buffer.from(content);
             await interaction.followUp({
-                files: [new MessageAttachment(buffer, 'quotes.txt')],
+                files: [new AttachmentBuilder(buffer, { name: 'quotes.txt' })],
                 content: 'Here you go: all the quotes saved from this server!',
                 ephemeral: true
             });
         } catch (e) {
             console.error(e);
-            await interaction.followUp({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
+            await interaction.followUp({ content: responseMessages.GENERIC_INTERACTION_ERROR, ephemeral: true });
         }
     },
 
@@ -225,7 +225,7 @@ module.exports = {
                 const myContext = myCanvas.getContext('2d');
                 myContext.drawImage(img, 0, 0);
                 await interaction.followUp({
-                    files: [new MessageAttachment(myCanvas.toBuffer('image/png'), 'wordcloud.png')],
+                    files: [new AttachmentBuilder(myCanvas.toBuffer('image/png'), { name: 'wordcloud.png' })],
                     content: author && author.length > 0
                         ? 'Here\'s a wordcloud for quotes said by "' + author + '"!'
                         : 'Here\'s a wordcloud I generated from this server\'s quotes!'
@@ -269,7 +269,7 @@ module.exports = {
                         }, '');
                     const buffer = Buffer.from(reply);
                     await interaction.followUp({
-                        files: [new MessageAttachment(buffer, 'authors.txt')],
+                        files: [new AttachmentBuilder(buffer, { name: 'authors.txt' })],
                         content: 'Here are all the different authors. There are a lot of them, so I put them in the attached text file.'
                     });
                 } else {
