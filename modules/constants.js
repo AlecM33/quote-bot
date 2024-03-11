@@ -6,14 +6,9 @@ module.exports = {
         2: 'SIZE_MEDIUM',
         3: 'SIZE_LARGE'
     },
-    WORDCLOUD_NUMBER_OF_WORDS_MAP: {
-        1: 25,
-        2: 50,
-        3: 100
-    },
     MAX_WORDCLOUD_WORDS: 300,
     MAX_DISCORD_MESSAGE_LENGTH: 2000,
-    MAX_AUTHOR_LENGTH: 120,
+    MAX_AUTHOR_LENGTH: 240,
     MENTION_REGEX: /<@[&!0-9]+>|<#[0-9]+>/g,
     AUTHOR_SEPARATOR: ' • '
 };

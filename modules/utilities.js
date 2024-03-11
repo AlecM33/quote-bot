@@ -27,7 +27,7 @@ module.exports = {
             quoteMessage = '_' + quoteMessage + '_';
         }
 
-        if (toFile && constants.MENTION_REGEX.test(quote.author)) { // Discord @s are represented as <@UserID>
+        if (toFile && quote.author.match(constants.MENTION_REGEX)) { // Discord @s are represented as <@UserID>
             quoteMessage = quoteMessage + ' - ' + await attemptToResolveMentionsToName(guildManager, interaction, quote.author);
         } else {
             quoteMessage = quoteMessage + ' - ' + quote.author;
