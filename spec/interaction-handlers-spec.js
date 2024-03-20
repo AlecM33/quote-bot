@@ -47,7 +47,7 @@ describe('interaction handlers', () => {
             await interactionHandlers.addHandler(interaction);
 
             expect(queries.addQuote).toHaveBeenCalledWith('quote', 'author', '123', undefined);
-            expect(interaction.reply).toHaveBeenCalledWith('Added the following:\n\n_"test"_ - jane doe');
+            expect(interaction.reply).toHaveBeenCalledWith('Added the following:\n\n"test" - jane doe');
         });
 
         it('should throw a duplicate key exception', async () => {
@@ -74,7 +74,7 @@ describe('interaction handlers', () => {
                 await interactionHandlers.addHandler(interaction);
             } catch (e) {
                 expect(queries.addQuote).toThrow();
-                expect(interaction.reply).toHaveBeenCalledWith(responseMessages.GENERIC_ERROR);
+                expect(interaction.reply).toHaveBeenCalledWith(responseMessages.GENERIC_INTERACTION_ERROR);
             }
         });
     });

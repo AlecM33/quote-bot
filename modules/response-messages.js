@@ -5,7 +5,6 @@ module.exports = {
     DELETE_SUCCESS: 'The quote was successfully removed.',
     NOTHING_DELETED: 'There is no quote with that identifier, so nothing was deleted.',
     DUPLICATE_QUOTE: 'An identical quote by this person has already been saved!',
-    GENERIC_ERROR: 'There was a problem saving your quote. Please try again later',
     GENERIC_RETRIEVAL_ERROR: 'There was a problem retrieving the specified quotes. Please contact the developer.',
     INCORRECT_AUTHOR_SYNTAX: "Invalid command. The author's name can only contain letters and spaces.",
     QUOTE_COUNT_0: 'There are no quotes saved!',
@@ -20,11 +19,11 @@ module.exports = {
         ' info found with the `/help` commmand.',
     HELP_MESSAGE: '\n\n**About:**\n\nThis is a bot for adding quotes and revisiting them later. To get the latest info on ' +
         'changes to the bot, use the `/updates` command.\n\n' +
-        'Add a quote with `/add`. The author can be a mention of a user in the server (e.g. @Bob) or simply a name (Bob). The quotation can be ' +
-        'entered as it is - there is no need to wrap it in quotation marks. If the quote was said before today, you can optionally provide a "date" parameter (MM/DD/YYYY or MM-DD-YYYY)\n\n' +
+        'Add a quote with `/add`. The author can be a mention of a user in the server (e.g. @Bob) or simply a name (Bob). You ' +
+        'do not need to wrap the quote in quotation marks. If the quote was said before today, you can optionally provide a "date" parameter (MM/DD/YYYY or MM-DD-YYYY)\n\n' +
         'Find quotes with `/search`. You can enter a word or phrase, and the bot will give you the quotes that match.\n\n' +
         'Pull random quotes with `/random`.\n\n' +
-        'You can receive all the quotes you have saved at any time using `/download`.\n\n' +
+        'You can receive all the quotes you have saved at any time using `/download`. You can also get a list of authors using `/authors`.\n\n' +
         'To `/delete` a quote, you must first use the `/search` command with the `include_identifier` ' +
         'option as `true`. This will return an integer ID for the quote. Then, provide that ID to the delete command' +
         ' (I am open to suggestions on how to make the deletion process easier).\n\n' +
@@ -38,7 +37,7 @@ module.exports = {
         'to moderate quote content. Quote content moderation is thus only about as good as your server\'s moderation.\n\n' +
         '**Support:**\n\nFor questions or concerns, you can e-mail the creator at leohfx@gmail.com. Thanks so much for using my bot! :) ' +
         'I hope it serves as a nice tool to preserve good memories.\n\n' +
-        'This bot is open source! Find it at: https://github.com/AlecM33/quote-bot',
+        'This bot is open source! Find it at: <https://github.com/AlecM33/quote-bot>',
     UPDATES_MESSAGE: '**Latest Updates**\n\n**v1.0.2** (11 March 2024)\n- Fixed a bug that prevented the `/authors` command ' +
         'from working if the bot\'s reply would exceed Discord\'s maximum message length. Now, if this would be the case, it will attach ' +
         'the authors as a file instead. \n\n**1000 quotes!** (28 December 2023)\n- This bot is now storing over 1000 ' +

@@ -19,7 +19,7 @@ module.exports = {
         } catch (e) {
             console.error(e);
             await interaction.reply({
-                content: responseMessages.GENERIC_ERROR,
+                content: responseMessages.GENERIC_INTERACTION_ERROR,
                 ephemeral: true
             });
         }
@@ -35,7 +35,7 @@ module.exports = {
         } catch (e) {
             console.error(e);
             await interaction.reply({
-                content: responseMessages.GENERIC_ERROR,
+                content: responseMessages.GENERIC_INTERACTION_ERROR,
                 ephemeral: true
             });
         }
@@ -142,7 +142,7 @@ module.exports = {
         const includeIdentifier = interaction.options.getBoolean('include_identifier');
         const searchResults = await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
             console.error(e);
-            await interaction.followUp({ content: responseMessages.GENERIC_ERROR });
+            await interaction.followUp({ content: responseMessages.GENERIC_INTERACTION_ERROR });
         });
 
         let reply = '';
@@ -170,7 +170,7 @@ module.exports = {
         console.info(`DELETE command invoked by guild: ${interaction.guildId}`);
         const result = await queries.deleteQuoteById(interaction.options.getInteger('identifier'), interaction.guildId).catch(async (e) => {
             console.error(e);
-            await interaction.reply({ content: responseMessages.GENERIC_ERROR, ephemeral: true });
+            await interaction.reply({ content: responseMessages.GENERIC_INTERACTION_ERROR, ephemeral: true });
         });
 
         if (!interaction.replied) {
