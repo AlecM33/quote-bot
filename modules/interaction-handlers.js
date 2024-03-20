@@ -15,7 +15,7 @@ module.exports = {
             await interaction.reply({
                 content: responseMessages.HELP_MESSAGE,
                 ephemeral: true
-            })
+            });
         } catch (e) {
             console.error(e);
             await interaction.reply({
