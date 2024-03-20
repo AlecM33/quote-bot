@@ -56,7 +56,6 @@ module.exports = {
                     quote,
                     true,
                     false,
-                    false,
                     true,
                     guildManager,
                     interaction
