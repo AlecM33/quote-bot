@@ -6,7 +6,6 @@ module.exports = {
         quote,
         includeDate = true,
         includeIdentifier = false,
-        includeMarkdown = true,
         toFile = false,
         guildManager = null,
         interaction = null
@@ -21,10 +20,6 @@ module.exports = {
 
         if (!quoteCharacters.includes(quoteMessage.charAt(quoteMessage.length - 1))) {
             quoteMessage = quoteMessage + '"';
-        }
-
-        if (includeMarkdown) {
-            quoteMessage = '_' + quoteMessage + '_';
         }
 
         if (toFile && quote.author.match(constants.MENTION_REGEX)) { // Discord @s are represented as <@UserID>
