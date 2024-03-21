@@ -29,7 +29,8 @@
     "discord.js": "^14.14.1",
     "jsdom": "^21.1.1",
     "pg": "^8.5.1",
-    "randomcolor": "^0.6.2"
+    "randomcolor": "^0.6.2",
+    "sharp": "^0.33.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
