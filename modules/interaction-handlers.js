@@ -234,7 +234,7 @@ module.exports = {
                     });
             });
             initializationResult.cloud.start();
-        } catch(e) {
+        } catch (e) {
             console.error(e);
             await interaction.followUp({
                 content: responseMessages.GENERIC_INTERACTION_ERROR
