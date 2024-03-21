@@ -29,6 +29,7 @@ module.exports = import('d3').then((d3) => {
                 }))
                 .padding(CONFIG.WORD_PADDING)
                 .rotate(CONFIG.WORD_ROTATION)
+                .timeInterval(10)
                 .fontSize(function (d) {
                     return d.size;
                 });
