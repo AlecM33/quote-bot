@@ -3,7 +3,7 @@ const queries = require('../database/queries.js');
 const { AttachmentBuilder } = require('discord.js');
 const wordcloudConstructor = require('../modules/wordcloud-constructor.js');
 const { JSDOM } = require('jsdom');
-const canvas = require('canvas');
+const sharp = require('sharp');
 const constants = require('./constants.js');
 const utilities = require('./utilities.js');
 
@@ -185,7 +185,8 @@ module.exports = {
     wordcloudHandler: async (interaction) => {
         console.info(`WORDCLOUD command invoked by guild: ${interaction.guildId}`);
         await interaction.deferReply();
-        global.document = new JSDOM().window.document; // d3-cloud requires that document be defined in the global scope.
+        // TODO: d3-cloud requires that document be defined in the global scope. Long-term, this is a problem.
+        global.document = new JSDOM().window.document;
         const author = interaction.options.getString('author')?.trim();
         const quotesForCloud = author && author.length > 0
             ? await queries.getQuotesFromAuthor(author, interaction.guildId)
@@ -197,48 +198,48 @@ module.exports = {
             });
             return;
         }
-        const wordsWithOccurrences = utilities.mapQuotesToFrequencies(quotesForCloud);
-        const constructor = await wordcloudConstructor;
-        const initializationResult = constructor.initialize(
-            wordsWithOccurrences
-                .sort((a, b) => a.frequency >= b.frequency ? -1 : 1)
-                .slice(0, constants.MAX_WORDCLOUD_WORDS),
-            constants.WORDCLOUD_SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM'
-        );
-        initializationResult.cloud.on('end', () => {
-            const d3 = constructor.draw(
-                initializationResult.cloud,
-                initializationResult.words,
-                global.document.body
+        try {
+            const wordsWithOccurrences = utilities.mapQuotesToFrequencies(quotesForCloud);
+            const constructor = await wordcloudConstructor;
+            const initializationResult = constructor.initialize(
+                wordsWithOccurrences
+                    .sort((a, b) => a.frequency >= b.frequency ? -1 : 1)
+                    .slice(0, constants.MAX_WORDCLOUD_WORDS),
+                constants.WORDCLOUD_SIZE
             );
-            const img = new canvas.Image();
-            img.onload = async () => {
-                const myCanvas = canvas.createCanvas(
-                    initializationResult.config[
-                        constants.WORDCLOUD_SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM'
-                    ],
-                    initializationResult.config[
-                        constants.WORDCLOUD_SIZE_MAP[interaction.options.getInteger('size')] || 'SIZE_MEDIUM'
-                    ]
+            initializationResult.cloud.on('end', () => {
+                const d3 = constructor.draw(
+                    initializationResult.cloud,
+                    initializationResult.words,
+                    global.document.body
                 );
-                const myContext = myCanvas.getContext('2d');
-                myContext.drawImage(img, 0, 0);
-                await interaction.followUp({
-                    files: [new AttachmentBuilder(myCanvas.toBuffer('image/png'), { name: 'wordcloud.png' })],
-                    content: author && author.length > 0
-                        ? 'Here\'s a wordcloud for quotes said by "' + author + '"!'
-                        : 'Here\'s a wordcloud I generated from this server\'s quotes!'
-                });
-                global.document = null;
-            };
-            img.onerror = err => {
-                console.error(err);
-                global.document = null;
-            };
-            img.src = 'data:image/svg+xml;base64,' + btoa(
-                decodeURIComponent(encodeURIComponent(d3.select(global.document.body).node().innerHTML)));
-        });
-        initializationResult.cloud.start();
+                const buffer = Buffer.from(d3.select(global.document.body).node().innerHTML.toString());
+                sharp(buffer)
+                    .resize(constants.WORDCLOUD_SIZE, constants.WORDCLOUD_SIZE)
+                    .png()
+                    .toBuffer()
+                    .then(async (data) => {
+                        await interaction.followUp({
+                            files: [new AttachmentBuilder(data, { name: 'wordcloud.png' })],
+                            content: author && author.length > 0
+                                ? 'Here\'s a wordcloud for quotes said by "' + author + '"!'
+                                : 'Here\'s a wordcloud I generated from this server\'s quotes!'
+                        });
+                    })
+                    .catch(async err => {
+                        console.error(err);
+                        await interaction.followUp({
+                            content: responseMessages.GENERIC_INTERACTION_ERROR
+                        });
+                    });
+            });
+            initializationResult.cloud.start();
+        } catch (e) {
+            console.error(e);
+            await interaction.followUp({
+                content: responseMessages.GENERIC_INTERACTION_ERROR
+            });
+        }
     },
 
     authorsHandler: async (interaction, guildManager) => {

@@ -4,10 +4,7 @@ const randomColor = require('randomcolor');
 const CONFIG = {
     FONT_SIZE_EXPONENT: 3,
     MIN_FONT_SIZE: 25,
-    MAX_FONT_SIZE: 200,
-    SIZE_SMALL: 500,
-    SIZE_MEDIUM: 1000,
-    SIZE_LARGE: 1500,
+    MAX_FONT_SIZE: 100,
     WORD_PADDING: 5,
     WORD_ROTATION: 0,
     COLORS: null
@@ -22,7 +19,7 @@ module.exports = import('d3').then((d3) => {
                 count: 3
             });
             wordcloud
-                .size([CONFIG[size], CONFIG[size]])
+                .size([size, size])
                 .words(wordsWithOccurrences = wordsWithOccurrences.map(function (d) {
                     return {
                         text: d.word,
@@ -32,6 +29,7 @@ module.exports = import('d3').then((d3) => {
                 }))
                 .padding(CONFIG.WORD_PADDING)
                 .rotate(CONFIG.WORD_ROTATION)
+                .timeInterval(10)
                 .fontSize(function (d) {
                     return d.size;
                 });
