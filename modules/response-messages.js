@@ -26,7 +26,7 @@ module.exports = {
         '`/download` - Receive all the quotes you have saved as a text file.\n' +
         '`/authors` - Receive a list of all unique authors of saved quotes.\n' +
         '`/count` - See how many quotes have been saved.\n' +
-        '`/delete` - Remove a quote by providing its numerical identifier. The identifier can be obtained by using the `/search` command with the `include_identifier` ' +
+        '`/delete` - Remove a quote by providing its numerical identifier. The identifier can be obtained by using the "/search" command with the `include_identifier` ' +
         'option as `true`.\n' +
         '`/wordcloud` - Generate a wordcloud visualization of quotes said in your server. This includes ' +
         'options to use a specific author\'s quotes and to use your choice of font. By default, the font will be one of ' +
