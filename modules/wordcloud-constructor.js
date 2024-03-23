@@ -12,7 +12,7 @@ const CONFIG = {
 
 module.exports = import('d3').then((d3) => {
     return {
-        initialize: (wordsWithOccurrences, size, document) => {
+        initialize: (wordsWithOccurrences, size, nodeDocument) => {
             const wordcloud = cloud();
             CONFIG.COLORS = randomColor({
                 luminosity: 'light',
@@ -30,7 +30,7 @@ module.exports = import('d3').then((d3) => {
                 .padding(CONFIG.WORD_PADDING)
                 .rotate(CONFIG.WORD_ROTATION)
                 .timeInterval(10)
-                .canvas(() => document.createElement('canvas'))
+                .canvas(() => nodeDocument.createElement('canvas'))
                 .fontSize(function (d) {
                     return d.size;
                 });
