@@ -18,7 +18,7 @@ from dozens of servers!
 
 ![image](https://user-images.githubusercontent.com/24642328/179651423-3e55ca4c-92ec-4564-929e-0b154670aa83.png)
 
-<img src='https://user-images.githubusercontent.com/24642328/227757021-ada37249-8e6d-41fa-86a7-529d907e6295.png' width=650/>
+![34ce20f52d819ca29083f77b7e87ebe7-ezgif com-crop](https://github.com/AlecM33/quote-bot/assets/24642328/ec68cae5-367a-41fa-9d3a-0c636509344d)
 
 # Tech Stack
 
