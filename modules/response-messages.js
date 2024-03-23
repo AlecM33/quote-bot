@@ -17,28 +17,30 @@ module.exports = {
     ' You can either narrow your search, or you can always download saved quotes using the `/download` command.',
     GENERIC_INTERACTION_ERROR: 'There was an error while executing this command! Feel free to contact the developer using' +
         ' info found with the `/help` commmand.',
-    HELP_MESSAGE: '\n\n**About:**\n\nThis is a bot for adding quotes and revisiting them later. To get the latest info on ' +
+    HELP_MESSAGE: 'To get the latest info on ' +
         'changes to the bot, use the `/updates` command.\n\n' +
-        'Add a quote with `/add`. The author can be a mention of a user in the server (e.g. @Bob) or simply a name (Bob). You ' +
-        'do not need to wrap the quote in quotation marks. If the quote was said before today, you can optionally provide a "date" parameter (MM/DD/YYYY or MM-DD-YYYY)\n\n' +
-        'Find quotes with `/search`. You can enter a word or phrase, and the bot will give you the quotes that match.\n\n' +
-        'Pull random quotes with `/random`.\n\n' +
-        'You can receive all the quotes you have saved at any time using `/download`. You can also get a list of authors using `/authors`.\n\n' +
-        'To `/delete` a quote, you must first use the `/search` command with the `include_identifier` ' +
-        'option as `true`. This will return an integer ID for the quote. Then, provide that ID to the delete command' +
-        ' (I am open to suggestions on how to make the deletion process easier).\n\n' +
-        'You can also generate a "wordcloud" visualization of quotes said in your server using `/wordcloud`.\n\n' +
+        '`/add` - Add a quote. The author can be a mention of a user in the server (e.g. @Bob) or simply a name (Bob). You ' +
+        'do not need to wrap the quote in quotation marks. If the quote was said before today, you can optionally provide a "date" parameter (MM/DD/YYYY or MM-DD-YYYY).\n' +
+        '`/search` - Find quotes that match a word or phrase.\n' +
+        '`/random` - Pull a random quote, optionally by a specific author.\n' +
+        '`/download` - Receive all the quotes you have saved as a text file.\n' +
+        '`/authors` - Receive a list of all unique authors of saved quotes.\n' +
+        '`/count` - See how many quotes have been saved.\n' +
+        '`/delete` - Remove a quote by providing its numerical identifier. The identifier can be obtained by using the `/search` command with the `include_identifier` ' +
+        'option as `true`.\n' +
+        '`/wordcloud` - Generate a wordcloud visualization of quotes said in your server. This includes ' +
+        'options to use a specific author\'s quotes and to use your choice of font. By default, the font will be one of ' +
+        'Georgia, Rockwell, Century Gothic, or Trebuchet MS. Additional supported fonts include Arial, Verdana, Tahoma, ' +
+        'Impact, Times New Roman, Baskerville, Courier, Comic Sans, Calibri, Consolas, and Segoe UI.\n\n' +
         '**Privacy Policy:**\n\n' +
         'Quotes added in a particular server can only be retrieved by users in that server. ' +
-        'The bot uses an SSL connection to store your quotes in a password-protected database. Only the bot and its ' +
-        'creator have access. Quotes (but not the names of their authors) are stored with encryption. The data is only' +
-        ' used for this bot and its associated commands. Obviously, the quotes you add are a reflection of you and your server.' +
-        ' For safety, the bot will not accept quotes that produce hyperlinks, but other than that, it does not attempt ' +
+        'The bot stores quotes in a secure database to which only the bot and its creator have access. The data is only' +
+        ' used for this bot and its associated commands. For safety, the bot will not accept quotes that produce hyperlinks, but other than that, it does not attempt ' +
         'to moderate quote content. Quote content moderation is thus only about as good as your server\'s moderation.\n\n' +
-        '**Support:**\n\nFor questions or concerns, you can e-mail the creator at leohfx@gmail.com. Thanks so much for using my bot! :) ' +
-        'I hope it serves as a nice tool to preserve good memories.\n\n' +
+        '**Support:**\n\nFor questions or concerns, you can e-mail the creator at quote.bot.contact@gmail.com. Thanks so much for using my bot! :)\n\n' +
         'This bot is open source! Find it at: <https://github.com/AlecM33/quote-bot>',
-    UPDATES_MESSAGE: '**Latest Updates**\n\n**v1.0.2** (11 March 2024)\n- Fixed a bug that prevented the `/authors` command ' +
+    UPDATES_MESSAGE: '**Latest Updates**\n\n**v1.1.0 - Changes to /wordcloud** (23 March 2024)\n- the wordcloud command now supports a "font" option with several choices. Reference those using the ' +
+        '/help command. To improve consistency in the visual output, the "size" option has been removed in favor of a single standard size. \n\n**v1.0.2** (11 March 2024)\n- Fixed a bug that prevented the `/authors` command ' +
         'from working if the bot\'s reply would exceed Discord\'s maximum message length. Now, if this would be the case, it will attach ' +
         'the authors as a file instead. \n\n**1000 quotes!** (28 December 2023)\n- This bot is now storing over 1000 ' +
         'quotes from several dozen servers. Cheers to the new year and happy quoting!\n\n**v1.0.1** (7 November 2023)\n-' +

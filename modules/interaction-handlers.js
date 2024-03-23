@@ -205,13 +205,15 @@ module.exports = {
                     .sort((a, b) => a.frequency >= b.frequency ? -1 : 1)
                     .slice(0, constants.MAX_WORDCLOUD_WORDS),
                 constants.WORDCLOUD_SIZE,
-                nodeDocument
+                nodeDocument,
+                interaction.options.getString('font')?.toLowerCase().trim()
             );
             initializationResult.cloud.on('end', () => {
                 const d3 = constructor.draw(
                     initializationResult.cloud,
                     initializationResult.words,
-                    nodeDocument.body
+                    nodeDocument.body,
+                    interaction.options.getString('font')?.toLowerCase().trim()
                 );
                 const buffer = Buffer.from(d3.select(nodeDocument.body).node().innerHTML.toString());
                 sharp(buffer)
@@ -219,11 +221,16 @@ module.exports = {
                     .png()
                     .toBuffer()
                     .then(async data => {
+                        let content = author && author.length > 0
+                            ? 'Here\'s a wordcloud for quotes said by "' + author + '"!'
+                            : 'Here\'s a wordcloud I generated from this server\'s quotes!';
+                        if (interaction.options.getString('font')
+                            && !constructor.CONFIG.FONTS[interaction.options.getString('font')?.toLowerCase().trim()]) {
+                            content += ' I couldn\'t use the font you wanted, though. Reference supported fonts using `/help`.';
+                        }
                         await interaction.followUp({
                             files: [new AttachmentBuilder(data, { name: 'wordcloud.png' })],
-                            content: author && author.length > 0
-                                ? 'Here\'s a wordcloud for quotes said by "' + author + '"!'
-                                : 'Here\'s a wordcloud I generated from this server\'s quotes!'
+                            content
                         });
                     })
                     .catch(async err => {
