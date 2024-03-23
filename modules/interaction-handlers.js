@@ -185,8 +185,6 @@ module.exports = {
     wordcloudHandler: async (interaction) => {
         console.info(`WORDCLOUD command invoked by guild: ${interaction.guildId}`);
         await interaction.deferReply();
-        // TODO: d3-cloud requires that document be defined in the global scope. Long-term, this is a problem.
-        global.document = new JSDOM().window.document;
         const author = interaction.options.getString('author')?.trim();
         const quotesForCloud = author && author.length > 0
             ? await queries.getQuotesFromAuthor(author, interaction.guildId)
@@ -199,26 +197,28 @@ module.exports = {
             return;
         }
         try {
+            const nodeDocument = new JSDOM().window.document;
             const wordsWithOccurrences = utilities.mapQuotesToFrequencies(quotesForCloud);
             const constructor = await wordcloudConstructor;
             const initializationResult = constructor.initialize(
                 wordsWithOccurrences
                     .sort((a, b) => a.frequency >= b.frequency ? -1 : 1)
                     .slice(0, constants.MAX_WORDCLOUD_WORDS),
-                constants.WORDCLOUD_SIZE
+                constants.WORDCLOUD_SIZE,
+                nodeDocument
             );
             initializationResult.cloud.on('end', () => {
                 const d3 = constructor.draw(
                     initializationResult.cloud,
                     initializationResult.words,
-                    global.document.body
+                    nodeDocument.body
                 );
-                const buffer = Buffer.from(d3.select(global.document.body).node().innerHTML.toString());
+                const buffer = Buffer.from(d3.select(nodeDocument.body).node().innerHTML.toString());
                 sharp(buffer)
                     .resize(constants.WORDCLOUD_SIZE, constants.WORDCLOUD_SIZE)
                     .png()
                     .toBuffer()
-                    .then(async (data) => {
+                    .then(async data => {
                         await interaction.followUp({
                             files: [new AttachmentBuilder(data, { name: 'wordcloud.png' })],
                             content: author && author.length > 0
