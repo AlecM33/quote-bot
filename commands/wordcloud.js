@@ -8,6 +8,10 @@ module.exports = {
         .addStringOption(option =>
             option.setName('author')
                 .setDescription('Generate a wordcloud from a specific author')
+                .setRequired(false))
+        .addStringOption(option =>
+            option.setName('font')
+                .setDescription('The font to use. Defaults to "Georgia"')
                 .setRequired(false)),
     async execute (interaction, guildManager) {
         await interactionHandlers.wordcloudHandler(interaction);

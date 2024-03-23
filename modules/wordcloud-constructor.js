@@ -6,13 +6,42 @@ const CONFIG = {
     MIN_FONT_SIZE: 25,
     MAX_FONT_SIZE: 100,
     WORD_PADDING: 5,
-    WORD_ROTATION: 0,
-    COLORS: null
+    WORD_ROTATION: () => { return 0; },
+    COLORS: null,
+    FONTS: {
+        arial: 'Arial',
+        verdana: 'Verdana',
+        tahoma: 'Tahoma',
+        'trebuchet ms': 'Trebuchet MS',
+        trebuchet: 'Trebuchet MS',
+        impact: 'Impact',
+        'times new roman': 'Times New Roman',
+        times: 'Times New Roman',
+        georgia: 'Georgia',
+        baskerville: 'Baskerville Old Face',
+        'baskerville old face': 'Baskerville Old Face',
+        courier: 'Courier New',
+        'courier new': 'Courier New',
+        'comic sans': 'Comic Sans MS',
+        'comic sans ms': 'Comic Sans MS',
+        calibri: 'Calibri',
+        'century gothic': 'Century Gothic',
+        consolas: 'Consolas',
+        rockwell: 'Rockwell',
+        'segoe ui': 'Segoe UI',
+        segoe: 'Segoe UI'
+    },
+    DEFAULT_FONTS: [
+        'Century Gothic',
+        'Rockwell',
+        'Georgia',
+        'Trebuchet MS'
+    ]
 };
 
 module.exports = import('d3').then((d3) => {
     return {
-        initialize: (wordsWithOccurrences, size, nodeDocument) => {
+        initialize: (wordsWithOccurrences, size, nodeDocument, font) => {
             const wordcloud = cloud();
             CONFIG.COLORS = randomColor({
                 luminosity: 'light',
@@ -30,6 +59,8 @@ module.exports = import('d3').then((d3) => {
                 .padding(CONFIG.WORD_PADDING)
                 .rotate(CONFIG.WORD_ROTATION)
                 .timeInterval(10)
+                .font(CONFIG.FONTS[font] || CONFIG.DEFAULT_FONTS[
+                    Math.floor(Math.random() * CONFIG.DEFAULT_FONTS.length)])
                 .canvas(() => nodeDocument.createElement('canvas'))
                 .fontSize(function (d) {
                     return d.size;
@@ -38,7 +69,7 @@ module.exports = import('d3').then((d3) => {
             return { cloud: wordcloud, words: wordsWithOccurrences, config: CONFIG };
         },
 
-        draw: (wordcloud, words, element) => {
+        draw: (wordcloud, words, element, font) => {
             d3.select(element).append('svg')
                 .attr('preserveAspectRatio', 'xMinYMin meet')
                 .attr('width', wordcloud.size()[0])
@@ -53,7 +84,8 @@ module.exports = import('d3').then((d3) => {
                 .style('font-size', function (d) {
                     return d.size + 'px';
                 })
-                .style('font-family', 'Georgia')
+                .style('font-family', CONFIG.FONTS[font] || CONFIG.DEFAULT_FONTS[
+                    Math.floor(Math.random() * CONFIG.DEFAULT_FONTS.length)])
                 .style('fill', () => {
                     return CONFIG.COLORS[Math.floor(Math.random() * CONFIG.COLORS.length)];
                 })
@@ -66,6 +98,7 @@ module.exports = import('d3').then((d3) => {
                 });
 
             return d3;
-        }
+        },
+        CONFIG
     };
 });
