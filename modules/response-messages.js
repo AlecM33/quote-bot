@@ -9,7 +9,7 @@ module.exports = {
     INCORRECT_AUTHOR_SYNTAX: "Invalid command. The author's name can only contain letters and spaces.",
     QUOTE_COUNT_0: 'There are no quotes saved!',
     GENERIC_ERROR_COUNT_COMMAND: 'There was a problem getting the number of quotes. Please try again later.',
-    NO_QUOTES_BY_AUTHOR: 'There are no quotes stored by that author!',
+    NO_QUOTES_BY_AUTHOR: 'I couldn\'t find any quotes to choose from!',
     RANDOM_QUOTE_GENERIC_ERROR: 'There was a problem getting a random quote. Please try again later',
     EMPTY_QUERY: 'There were no quotes found matching your search.',
     QUERY_TOO_GENERAL: 'Your search returned more than ' + require('./constants.js').MAX_SEARCH_RESULTS + ' results. Try narrowing your search.',
