@@ -51,7 +51,7 @@ module.exports = {
 
     fetchUniqueAuthors: (guildId) => {
         return query({
-            text: `SELECT DISTINCT author FROM quotes WHERE guild_id = $1;`,
+            text: `SELECT DISTINCT author FROM quotes WHERE guild_id = $1 ORDER BY author;`,
             values: [
                 guildId
             ]
@@ -85,6 +85,24 @@ module.exports = {
         return query({
             text: 'SELECT COUNT(*) FROM quotes WHERE author = $1 AND guild_id = $2;',
             values: [author, guildId]
+        });
+    },
+
+    fetchQuotesBySearchStringAndAuthor: (searchString, guildId, author) => {
+        return query({
+            text: `SELECT
+                      id,
+                      PGP_SYM_DECRYPT(quotation::bytea, $1) as quotation,
+                      author,
+                      said_at FROM quotes
+                   WHERE author = $2 AND LOWER(PGP_SYM_DECRYPT(quotation::bytea, $3)) LIKE LOWER($4) AND guild_id = $5;`,
+            values: [
+                encryptionKey,
+                author,
+                encryptionKey,
+                '%' + searchString + '%',
+                guildId
+            ]
         });
     },
 
