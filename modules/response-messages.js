@@ -18,7 +18,7 @@ module.exports = {
     GENERIC_INTERACTION_ERROR: 'There was an error while executing this command! Feel free to contact the developer using' +
         ' info found with the `/help` commmand.',
     HELP_MESSAGE: 'To get the latest info on ' +
-        'changes to the bot, use the `/updates` command.\n\n' +
+        'changes to the bot, use the `/updates` command. To add the bot to another server, use [this link](https://discord.com/oauth2/authorize?client_id=777314683333771285&permissions=277025392640&scope=bot).\n\n' +
         '`/add` - Add a quote. The author can be a mention of a user in the server (e.g. @Bob) or simply a name (Bob). You ' +
         'do not need to wrap the quote in quotation marks. If the quote was said before today, you can optionally provide a "date" parameter (MM/DD/YYYY or MM-DD-YYYY).\n' +
         '`/search` - Find quotes that match a word or phrase.\n' +
@@ -30,13 +30,12 @@ module.exports = {
         'option as `true`.\n' +
         '`/wordcloud` - Generate a wordcloud visualization of quotes said in your server. This includes ' +
         'options to use a specific author\'s quotes and to use your choice of font. By default, the font will be one of ' +
-        'Georgia, Rockwell, Century Gothic, or Trebuchet MS. Additional supported fonts include Arial, Verdana, Tahoma, ' +
+        'Georgia, Rockwell, Century Gothic, or Trebuchet MS. Additional fonts include Arial, Verdana, Tahoma, ' +
         'Impact, Times New Roman, Baskerville, Courier, Comic Sans, Calibri, Consolas, and Segoe UI.\n\n' +
         '**Privacy Policy:**\n\n' +
         'Quotes added in a particular server can only be retrieved by users in that server. ' +
-        'The bot stores quotes in a secure database to which only the bot and its creator have access. The data is only' +
-        ' used for this bot and its associated commands. For safety, the bot will not accept quotes that produce hyperlinks, but other than that, it does not attempt ' +
-        'to moderate quote content. Quote content moderation is thus only about as good as your server\'s moderation.\n\n' +
+        'The bot stores quotes in a secure database to which only the bot and its creator have access. For safety, the bot will not accept quotes that produce hyperlinks, Other than that, ' +
+        'quote content moderation is only about as good as your server\'s moderation.\n\n' +
         '**Support:**\n\nFor questions or concerns, you can e-mail the creator at quote.bot.contact@gmail.com. Thanks so much for using my bot! :)\n\n' +
         'This bot is open source! Find it at: <https://github.com/AlecM33/quote-bot>',
     UPDATES_MESSAGE: '**Latest Updates**\n\n**v1.1.0 - Changes to /wordcloud** (23 March 2024)\n- the wordcloud command now supports a "font" option with several choices. Reference those using the ' +
