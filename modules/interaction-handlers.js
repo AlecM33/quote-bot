@@ -140,11 +140,16 @@ module.exports = {
         await interaction.deferReply();
         const searchString = interaction.options.getString('search_string')?.trim();
         const includeIdentifier = interaction.options.getBoolean('include_identifier');
-        const searchResults = await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
-            console.error(e);
-            await interaction.followUp({ content: responseMessages.GENERIC_INTERACTION_ERROR });
-        });
-
+        const author = interaction.options.getString('author')?.trim();
+        const searchResults = author && author.length > 0
+            ? await queries.fetchQuotesBySearchStringAndAuthor(searchString, interaction.guildId, author).catch(async (e) => {
+                console.error(e);
+                await interaction.followUp({ content: responseMessages.GENERIC_INTERACTION_ERROR });
+            })
+            : await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
+                console.error(e);
+                await interaction.followUp({ content: responseMessages.GENERIC_INTERACTION_ERROR });
+            });
         let reply = '';
         if (searchResults.length === 0) {
             reply += responseMessages.EMPTY_QUERY;
