@@ -4,11 +4,15 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('delete')
-        .setDescription('Delete a quote by its identifier.')
-        .addIntegerOption(option =>
-            option.setName('identifier')
-                .setDescription('the identifier of the quote, obtained via the /search command with "include_identifier" as True.')
-                .setRequired(true)),
+        .setDescription('Delete quotes that match your search.')
+        .addStringOption(option =>
+            option.setName('search_string')
+                .setDescription('a keyword or keyphrase')
+                .setRequired(true))
+        .addStringOption(option =>
+            option.setName('author')
+                .setDescription('narrow your options by an author')
+                .setRequired(false)),
     async execute (interaction, guildManager) {
         await interactionHandlers.deleteHandler(interaction);
     }

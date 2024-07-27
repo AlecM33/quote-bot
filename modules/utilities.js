@@ -1,11 +1,12 @@
 const STOP_WORDS = require('../modules/stop-words.js');
 const constants = require('./constants.js');
+const queries = require('../database/queries.js');
+const { ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
     formatQuote: async (
         quote,
         includeDate = true,
-        includeIdentifier = false,
         toFile = false,
         guildManager = null,
         interaction = null
@@ -36,15 +37,35 @@ module.exports = {
             }) + ')';
         }
 
-        if (includeIdentifier) {
-            quoteMessage += ' (**identifier**: ' + quote.id + ')';
-        }
-
         return quoteMessage;
     },
 
     formatAuthor: async (guildManager, interaction, author) => {
         return await attemptToResolveMentionsToName(guildManager, interaction, author);
+    },
+
+    getQuoteSearchResults: async (interaction) => {
+        const searchString = interaction.options.getString('search_string')?.trim();
+        const author = interaction.options.getString('author')?.trim();
+        return author && author.length > 0
+            ? await queries.fetchQuotesBySearchStringAndAuthor(searchString, interaction.guildId, author)
+            : await queries.fetchQuotesBySearchString(searchString, interaction.guildId);
+    },
+
+    buildDeleteInteraction: async (searchResults) => {
+        const buttons = [];
+        let reply = '';
+        let i = 0;
+        for (const result of searchResults) {
+            const quote = await module.exports.formatQuote(result, true);
+            reply += '#' + (i + 1) + ': ' + quote + '\n';
+            buttons.push(new ButtonBuilder()
+                .setCustomId(result.id.toString())
+                .setLabel('Delete #' + (i + 1))
+                .setStyle(ButtonStyle.Danger));
+            i ++;
+        }
+        return { replyText: reply, buttons };
     },
 
     validateAddCommand: async (quote, author, date, interaction) => {

@@ -1,6 +1,6 @@
 const responseMessages = require('./response-messages.js');
 const queries = require('../database/queries.js');
-const { AttachmentBuilder } = require('discord.js');
+const { AttachmentBuilder, ActionRowBuilder } = require('discord.js');
 const wordcloudConstructor = require('../modules/wordcloud-constructor.js');
 const { JSDOM } = require('jsdom');
 const sharp = require('sharp');
@@ -55,7 +55,6 @@ module.exports = {
                 content += await utilities.formatQuote(
                     quote,
                     true,
-                    false,
                     true,
                     guildManager,
                     interaction
@@ -89,7 +88,7 @@ module.exports = {
                 }
             });
             if (!interaction.replied) {
-                await interaction.reply('Added the following:\n\n' + await utilities.formatQuote(result[0], date !== undefined, false));
+                await interaction.reply('Added the following:\n\n' + await utilities.formatQuote(result[0], date !== undefined));
             }
         }
     },
@@ -103,9 +102,11 @@ module.exports = {
                 : await queries.fetchQuoteCount(interaction.guildId);
             if (queryResult.length > 0) {
                 if (author) {
-                    await interaction.reply('**' + author + '** has said **' + queryResult[0].count + '** quotes.');
+                    await interaction.reply('**' + author + '** has said **' + queryResult[0].count + '** quote(s).');
                 } else {
-                    await interaction.reply('There are **' + queryResult[0].count + '** quotes.');
+                    await interaction.reply((queryResult[0].count === '1'
+                        ? 'There is **1** quote.'
+                        : 'There are **' + queryResult[0].count + '** quotes.'));
                 }
             } else {
                 await interaction.reply(responseMessages.QUOTE_COUNT_0);
@@ -125,7 +126,7 @@ module.exports = {
                 : await queries.fetchAllQuotes(interaction.guildId);
             if (queryResult.length > 0) {
                 const randomQuote = queryResult[Math.floor(Math.random() * queryResult.length)];
-                await interaction.reply(await utilities.formatQuote(randomQuote, true, false));
+                await interaction.reply(await utilities.formatQuote(randomQuote, true));
             } else {
                 await interaction.reply(responseMessages.NO_QUOTES_BY_AUTHOR);
             }
@@ -138,18 +139,14 @@ module.exports = {
     searchHandler: async (interaction) => {
         console.info(`SEARCH command invoked by guild: ${interaction.guildId}`);
         await interaction.deferReply();
-        const searchString = interaction.options.getString('search_string')?.trim();
-        const includeIdentifier = interaction.options.getBoolean('include_identifier');
-        const author = interaction.options.getString('author')?.trim();
-        const searchResults = author && author.length > 0
-            ? await queries.fetchQuotesBySearchStringAndAuthor(searchString, interaction.guildId, author).catch(async (e) => {
-                console.error(e);
-                await interaction.followUp({ content: responseMessages.GENERIC_INTERACTION_ERROR });
-            })
-            : await queries.fetchQuotesBySearchString(searchString, interaction.guildId).catch(async (e) => {
-                console.error(e);
-                await interaction.followUp({ content: responseMessages.GENERIC_INTERACTION_ERROR });
-            });
+        let searchResults;
+        try {
+            searchResults = await utilities.getQuoteSearchResults(interaction);
+        } catch (e) {
+            console.error(e);
+            await interaction.followUp({ content: responseMessages.GENERIC_INTERACTION_ERROR });
+            return;
+        }
         let reply = '';
         if (searchResults.length === 0) {
             reply += responseMessages.EMPTY_QUERY;
@@ -157,7 +154,7 @@ module.exports = {
             reply += responseMessages.QUERY_TOO_GENERAL;
         } else {
             for (const result of searchResults) {
-                const quote = await utilities.formatQuote(result, true, includeIdentifier);
+                const quote = await utilities.formatQuote(result, true);
                 reply += quote + '\n';
             }
         }
@@ -172,18 +169,53 @@ module.exports = {
     },
 
     deleteHandler: async (interaction) => {
+        await interaction.deferReply();
         console.info(`DELETE command invoked by guild: ${interaction.guildId}`);
-        const result = await queries.deleteQuoteById(interaction.options.getInteger('identifier'), interaction.guildId).catch(async (e) => {
+        let searchResults;
+        try {
+            searchResults = await utilities.getQuoteSearchResults(interaction);
+        } catch (e) {
             console.error(e);
-            await interaction.reply({ content: responseMessages.GENERIC_INTERACTION_ERROR, ephemeral: true });
+            await interaction.followUp({ content: responseMessages.GENERIC_INTERACTION_ERROR });
+            return;
+        }
+        if (searchResults.length === 0) {
+            await interaction.followUp(responseMessages.EMPTY_QUERY);
+            return;
+        } else if (searchResults.length > constants.MAX_DELETE_SEARCH_RESULTS) {
+            await interaction.followUp(responseMessages.DELETE_QUERY_TOO_GENERAL);
+            return;
+        }
+        const replyComponents = await utilities.buildDeleteInteraction(searchResults);
+        if (replyComponents.replyText.length > constants.MAX_DISCORD_MESSAGE_LENGTH) {
+            await interaction.followUp({ content: responseMessages.DELETE_SEARCH_RESULT_TOO_LONG });
+            return;
+        }
+        const response = await interaction.followUp({
+            content: replyComponents.replyText,
+            components: [new ActionRowBuilder().addComponents(replyComponents.buttons)]
         });
-
-        if (!interaction.replied) {
-            if (result.length === 0) {
-                await interaction.reply({ content: responseMessages.NOTHING_DELETED, ephemeral: true });
-            } else {
-                await interaction.reply('The following quote was deleted: \n\n' + await utilities.formatQuote(result[0], true, false));
-            }
+        const collectorFilter = i => i.user.id === interaction.user.id;
+        try {
+            const choice = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
+            queries.deleteQuoteById(choice.customId, interaction.guildId)
+                .then(async (result) => {
+                    if (result.length === 0) {
+                        await choice.update({ content: responseMessages.NOTHING_DELETED, components: [] });
+                    } else {
+                        await choice.update({
+                            content: 'The following quote was deleted: \n\n' +
+                                await utilities.formatQuote(result[0], true),
+                            components: []
+                        });
+                    }
+                })
+                .catch(async (e) => {
+                    console.error(e);
+                    await choice.update({ content: responseMessages.GENERIC_INTERACTION_ERROR, ephemeral: false, components: [] });
+                });
+        } catch (e) {
+            await interaction.editReply({ content: 'A quote was not chosen within 60 seconds, so I cancelled the interaction.', components: [] });
         }
     },
 

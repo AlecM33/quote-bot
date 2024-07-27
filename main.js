@@ -24,7 +24,7 @@ BOT.once('ready', () => {
     console.log('Ready!');
 });
 
-BOT.login(process.env.TOKEN).then(() => {
+BOT.login(process.env.TOKEN?.trim()).then(() => {
     console.log('bot successfully logged in');
 });
 
