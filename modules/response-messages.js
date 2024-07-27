@@ -13,8 +13,11 @@ module.exports = {
     RANDOM_QUOTE_GENERIC_ERROR: 'There was a problem getting a random quote. Please try again later',
     EMPTY_QUERY: 'There were no quotes found matching your search.',
     QUERY_TOO_GENERAL: 'Your search returned more than ' + require('./constants.js').MAX_SEARCH_RESULTS + ' results. Try narrowing your search.',
+    DELETE_QUERY_TOO_GENERAL: 'Your search for quotes to delete returned more than the max of 5 results. Please narrow your search.',
     SEARCH_RESULT_TOO_LONG: 'Your search returned results, but returning them all would exceed Discord\'s 2000 character limit for messages.' +
     ' You can either narrow your search, or you can always download saved quotes using the `/download` command.',
+    DELETE_SEARCH_RESULT_TOO_LONG: 'Your search returned results, but returning them all would exceed Discord\'s 2000 character limit for messages.' +
+        ' Please narrow your search.',
     GENERIC_INTERACTION_ERROR: 'There was an error while executing this command! Feel free to contact the developer using' +
         ' info found with the `/help` commmand.',
     HELP_MESSAGE: 'To get the latest info on ' +
