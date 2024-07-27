@@ -187,7 +187,6 @@ module.exports = {
             return;
         }
         const replyComponents = await utilities.buildDeleteInteraction(searchResults);
-        console.log(replyComponents.replyText.length);
         if (replyComponents.replyText.length > constants.MAX_DISCORD_MESSAGE_LENGTH) {
             await interaction.followUp({ content: responseMessages.DELETE_SEARCH_RESULT_TOO_LONG });
             return;

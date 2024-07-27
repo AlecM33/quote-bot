@@ -65,8 +65,7 @@ module.exports = {
                 .setStyle(ButtonStyle.Danger));
             i ++;
         }
-        console.log(reply);
-        return { replyText: reply + '\n\n', buttons };
+        return { replyText: reply, buttons };
     },
 
     validateAddCommand: async (quote, author, date, interaction) => {

@@ -26,27 +26,25 @@ module.exports = {
         'do not need to wrap the quote in quotation marks. If the quote was said before today, you can optionally provide a "date" parameter (MM/DD/YYYY or MM-DD-YYYY).\n' +
         '`/search` - Find quotes that match a word or phrase.\n' +
         '`/random` - Pull a random quote, optionally by a specific author.\n' +
+        '`/delete` - Works similarly to /search - find quotes by a word or phrase, and the bot will display buttons to delete the quote of your choice from the results.\n' +
         '`/download` - Receive all the quotes you have saved as a text file.\n' +
         '`/authors` - Receive a list of all unique authors of saved quotes.\n' +
         '`/count` - See how many quotes have been saved.\n' +
-        '`/delete` - Remove a quote by providing its numerical identifier. The identifier can be obtained by using the "/search" command with the `include_identifier` ' +
-        'option as `true`.\n' +
         '`/wordcloud` - Generate a wordcloud visualization of quotes said in your server. This includes ' +
         'options to use a specific author\'s quotes and to use your choice of font. By default, the font will be one of ' +
         'Georgia, Rockwell, Century Gothic, or Trebuchet MS. Additional fonts include Arial, Verdana, Tahoma, ' +
         'Impact, Times New Roman, Baskerville, Courier, Comic Sans, Calibri, Consolas, and Segoe UI.\n\n' +
-        '**Privacy Policy:**\n\n' +
-        'Quotes added in a particular server can only be retrieved by users in that server. ' +
-        'The bot stores quotes in a secure database to which only the bot and its creator have access. For safety, the bot will not accept quotes that produce hyperlinks, Other than that, ' +
-        'quote content moderation is only about as good as your server\'s moderation.\n\n' +
+        '[Privacy Policy](<https://alecm33.github.io/quote-bot/#privacy-policy>)\n\n' +
         '**Support:**\n\nFor questions or concerns, you can e-mail the creator at quote.bot.contact@gmail.com. Thanks so much for using my bot! :)\n\n' +
         'This bot is open source! Find it at: <https://github.com/AlecM33/quote-bot>',
-    UPDATES_MESSAGE: '**Latest Updates**\n\n**v1.1.0 - Changes to /wordcloud** (23 March 2024)\n- the wordcloud command now supports a "font" option with several choices. Reference those using the ' +
-        '/help command. To improve consistency in the visual output, the "size" option has been removed in favor of a single standard size. \n\n**v1.0.2** (11 March 2024)\n- Fixed a bug that prevented the `/authors` command ' +
+    UPDATES_MESSAGE: '**Latest Updates**\n\n' +
+        '**v2.0.0** - Better /delete command, 2000 quotes! (7 July 2024)\n- The delete command has been re-designed to be more fluid. It now functions like the search ' +
+        'command - provide a search phrase and the bot will return up to 5 results that match, with buttons to delete the quote of your choice.\n- The bot is now storing over 2000 total quotes. Cheers!\n\n' +
+        '**v1.1.0 - Changes to /wordcloud** (23 March 2024)\n- the wordcloud command now supports a "font" option with several choices. Reference those using the ' +
+        '/help command. To improve consistency in the visual output, the "size" option has been removed in favor of a single standard size.' +
+        ' \n\n**v1.0.2** (11 March 2024)\n- Fixed a bug that prevented the `/authors` command ' +
         'from working if the bot\'s reply would exceed Discord\'s maximum message length. Now, if this would be the case, it will attach ' +
-        'the authors as a file instead. \n\n**1000 quotes!** (28 December 2023)\n- This bot is now storing over 1000 ' +
-        'quotes from several dozen servers. Cheers to the new year and happy quoting!\n\n**v1.0.1** (7 November 2023)\n-' +
-        ' There is now an optional "date" parameter for the `/add` command. If a quote was said a while ago, and you want' +
-        ' to capture that when saving it with this bot, provide a date. The bot will say it was added on that day. Otherwise,' +
-        ' it will use today\'s date.'
+        'the authors as a file instead.' +
+        ' \n\n**1000 quotes!** (28 December 2023)\n- This bot is now storing over 1000 ' +
+        'quotes from several dozen servers. Cheers to the new year and happy quoting!'
 };
