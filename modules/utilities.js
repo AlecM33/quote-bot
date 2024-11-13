@@ -98,6 +98,7 @@ module.exports = {
         const wordsWithOccurrences = [];
         for (const quote of quotesForCloud) {
             const words = quote.quotation
+                .replace(/[^\p{L}0-9'’\/-]/gu, ' ')
                 .split(' ')
                 .filter((word) => word.length > 0 && !STOP_WORDS.includes(word.toLowerCase()));
             for (const word of words) {
