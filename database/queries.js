@@ -130,6 +130,7 @@ module.exports = {
 
 function query (queryParams) {
     return new Promise((resolve, reject) => {
+        console.time("query");
         pool.connect().then((client) => client.query(queryParams, (err, res) => {
             if (err) {
                 client.release();
@@ -142,5 +143,6 @@ function query (queryParams) {
             console.error(e);
             reject(new Error('The bot could not complete your request due to connection issues.'));
         });
+        console.timeEnd("query");
     });
 }
