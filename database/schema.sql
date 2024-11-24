@@ -1,4 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS citext;
 
 CREATE COLLATION ci (
@@ -13,5 +12,6 @@ CREATE TABLE quotes(
     author character varying(280) COLLATE ci NOT NULL,
     said_at date NOT NULL,
     guild_id character varying(64) NOT NULL,
-    hash text NOT NULL PRIMARY KEY
+    hash text NOT NULL PRIMARY KEY,
+    created_at timestamp with time zone DEFAULT current_timestamp
 );
