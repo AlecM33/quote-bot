@@ -13,8 +13,8 @@ queries.addQuote('test', 'jane', '1').then((addResult) => {
     console.log(addResult);
     const addedQuoteId = addResult[0].id;
     verify('quote was added to database', addResult.length > 0);
-    verify('query returned unencrypted quote', addResult.length > 0 && addResult[0].quotation && addResult[0].quotation === 'test');
-    verify('query returned unencrypted author', addResult.length > 0 && addResult[0].author && addResult[0].author === 'jane');
+    verify('query returned added quote', addResult.length > 0 && addResult[0].quotation && addResult[0].quotation === 'test');
+    verify('query returned added author', addResult.length > 0 && addResult[0].author && addResult[0].author === 'jane');
     Promise.all(
         [
             queries.fetchAllQuotes('1'),
@@ -31,11 +31,11 @@ queries.addQuote('test', 'jane', '1').then((addResult) => {
             console.log(deletionResult);
             verify('the quote was deleted', deletionResult.length > 0);
             verify(
-                'deletion returned unencrypted quote',
+                'deletion returned deleted quote',
                 deletionResult.length > 0 && deletionResult[0].quotation && deletionResult[0].quotation === 'test'
             );
             verify(
-                'deletion returned unencrypted author',
+                'deletion returned deleted author',
                 deletionResult.length > 0 && deletionResult[0].author && deletionResult[0].author === 'jane'
             );
             console.log('complete.');
