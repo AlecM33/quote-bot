@@ -62,7 +62,7 @@ module.exports = {
                      quotation,
                      author,
                      said_at
-                   FROM quotes WHERE author = $2 AND guild_id = $3;`,
+                   FROM quotes WHERE author = $1 AND guild_id = $2;`,
             values: [
                 author,
                 guildId
