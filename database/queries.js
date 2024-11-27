@@ -137,12 +137,13 @@ function query (queryParams) {
                 reject(err);
             } else {
                 client.release();
+                console.timeEnd("query");
                 resolve(res.rows);
             }
         })).catch((e) => {
             console.error(e);
+            console.timeEnd("query");
             reject(new Error('The bot could not complete your request due to connection issues.'));
         });
-        console.timeEnd("query");
     });
 }
