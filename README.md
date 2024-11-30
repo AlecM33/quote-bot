@@ -1,6 +1,6 @@
 # quote-bot
 
-### Add this bot to your server via top.gg: https://top.gg/bot/777314683333771285, or read below for how to set up your own instance. 
+#### Add this bot to your server [here](https://discord.com/oauth2/authorize?client_id=777314683333771285). 
 
 `/add` - add a quote by a specified author.<br>
 `/random` - display a random quote, optionally by author.<br>
