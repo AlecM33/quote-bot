@@ -82,7 +82,12 @@ module.exports = {
         if (!interaction.replied) {
             const result = await queries.addQuote(quote, author, interaction.guildId, date).catch(async (e) => {
                 if (e.message.includes('duplicate key')) {
-                    await interaction.reply({ content: responseMessages.DUPLICATE_QUOTE, ephemeral: true });
+                    await interaction.reply({
+                        content: responseMessages.DUPLICATE_QUOTE,
+                        ephemeral: true
+                    });
+                } else if (e.message.includes('date/time field value out of range')) {
+                    await interaction.reply({ content: 'The date for your quote is invalid. Make sure it is in either MM/DD/YYYY or MM-DD-YYYY format.', ephemeral: true });
                 } else {
                     await interaction.reply({ content: 'Error adding your quote: ' + e.message, ephemeral: true });
                 }
