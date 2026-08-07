@@ -1,13 +1,11 @@
 const { Pool } = require('pg');
-const fs = require('fs');
-const path = require('path');
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL?.trim(),
     ssl: process.env.NODE_ENV.trim() !== 'development'
         ? {
             rejectUnauthorized: true,
-            ca: fs.readFileSync(path.join(__dirname, '/certs/ca.pem')).toString()
+            ca: process.env.DB_CA_CERT
         }
         : false
 });

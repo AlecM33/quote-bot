@@ -27,7 +27,7 @@ I currently host the bot using the [Heroku Cloud Platform](https://heroku.com). 
 
 Stored quotes are associated with a specific guild, so you can safely add the same instance of the bot to multiple servers. 
 
-For the bot to run, you need to populate 3 environment variables referenced within the code. These are `process.env.CLIENT_ID`, `process.env.DATABASE_URL`, and `process.env.TOKEN`. Read below for how to obtain these.
+For the bot to run, you need to populate 4 environment variables referenced within the code. These are `process.env.CLIENT_ID`, `process.env.DATABASE_URL`, `process.env.DB_CA_CERT`, and `process.env.TOKEN`. Read below for how to obtain these.
 
 1. You'll need to [create a discord application through the developer portal](https://discord.com/developers/applications). Your application will be assigned an "Application ID" (aka client id), which can be referenced in the "General Information" section. This will be the value of `process.env.CLIENT_ID`. 
 
@@ -40,8 +40,12 @@ For the bot to run, you need to populate 3 environment variables referenced with
 3. You will need an instance of a PostgreSQL database, preferably version 14 to ensure compatibility with the "citext" extension - see "Database Schema" below. `process.env.DATABASE_URL` will need to be the value of the connection string for this database. That connection string will be structured like so:
 
     `postgres://your-username:your-password@your-host:your-port/your-database-name`. 
-    
-4. You'll need to populate the database with the appropriate schema. See the "Database Schema" section.
+
+4. If your database requires SSL with a custom CA certificate, set `process.env.DB_CA_CERT` to the full contents of the CA certificate PEM string. For example:
+
+    `DB_CA_CERT="-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"`
+
+5. You'll need to populate the database with the appropriate schema. See the "Database Schema" section.
    
 5. You'll need to add the bot to your desired server. Within the "Bot" section of your Discord application, you can create a permissions integer that will be added to the OAuth link for a given bot. I recommend, at minimum, the "Send Messages", "Send Messages in Threads", and "Use Slash Commands" permissions, which produce integer `277025392640`. The link to add the bot would then be the following, with your application ID substituted in:
 
